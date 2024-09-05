@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/tomato.png') }}">
+  {% block head %}
+  <title>{% block title %}{% endblock %}</title>
+  {% endblock %}
+
+</head>
+
+<body>
+
+
+  <!--msb: main sidebar-->
+  <div class="main-container">
+    <div class="row">
+      <div class="col-2 left-side">
+        <nav class="nav" role="navigation">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <div class="brand-wrapper">
+              <!-- Brand -->
+              <div class="brand-name-wrapper">
+                <a class="navbar-brand" href="#">
+                  POMODORO
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Main Menu -->
+          <div class="side-menu-container">
+            <ul class="nav navbar-nav">
+
+              {% if session["user_id"] %}
+              <ul class="navbar-nav me-auto mt-2">
+                <li class="nav-item"><a class="nav-link" href="/timer">Timer</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="/chart">Chart</a></li>
+              </ul>
+              <li class="taskerini">{{ session["logged_as"] }}</li>
+              <ul class="navbar-nav ms-auto mt-2">
+                <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+              </ul>
+              {% else %}
+              <ul class="navbar-nav ms-auto mt-2">
+                <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+              </ul>
+              {% endif %}
+
+          </div><!-- /.navbar-collapse -->
+        </nav>
+      </div>
+
+        {% if get_flashed_messages() %}
+        <header>
+          <div class="alert alert-primary mb-0 text-center" role="alert">
+            {{ get_flashed_messages() | join(" ") }}
+          </div>
+        </header>
+        {% endif %}
+
+      
+        <!--main content wrapper-->
+      <div class="col middle-side">
+          <!--navigation here-->
+          <!--main content view-->
+          {% block main %}
+
+          {% endblock %}
+
+      </div>
+
+      
+      
+    </div>
+
+
+  </div>
+
+</body>
+
+</html>

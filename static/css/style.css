@@ -1,0 +1,858 @@
+body {
+    margin-top: 50px;
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    color: #39464e;
+  }
+  
+  .navbar-default {
+    background-color: #FFF;
+    margin-left: 200px;
+  }
+  
+  /*main side bar*/
+  .msb {
+    width: 200px;
+    background-color: #152530;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    white-space: nowrap;
+    height: 100%;
+    z-index: 1;
+    border-right: 1px solid #ddd;
+    .navbar {
+      border: none;
+      margin-left: 0;
+      background-color: inherit;
+    }
+    .navbar-header {
+      width: 100%;
+      border-bottom: 1px solid #e7e7e7;
+      margin-bottom: 20px;
+      background: #fff;
+    }
+    .navbar-nav {
+      .panel {
+        border: 0 none;
+        box-shadow: none;
+        margin: 0;
+        background: inherit;
+      }
+      li {
+        display: block;
+        width: 100%;
+        a {
+          padding: 15px;
+          color: #5f5f5f;
+          .glyphicon, .fa {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+    .nb {
+      padding-top: 5px;
+      padding-left: 10px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      
+    }
+  }
+  ul.nv,
+  ul.ns {
+    position: relative;
+    padding: 0;
+    list-style: none;  
+  }
+  .nv {  
+    li {
+      display: block;
+      position: relative;
+      
+      &::before {
+        clear: both;
+        content: "";      
+        display: table;
+      }
+      a {
+        color: #444;
+        padding: 10px 25px;
+        display: block;
+        /* vertical-align: middle; */
+        
+        .ic {
+          font-size: 16px;
+          margin-right: 5px;
+          font-weight: 300;
+          display: inline-block;
+        }
+      }
+    }
+    /*ns: nav-sub*/
+    .ns {
+      li {
+        a {
+          padding: 10px 50px;
+        }
+      }
+      
+    }
+    
+  }
+  
+  
+  /*main content wrapper*/
+  .mcw {
+    margin-left: 200px;
+    position: relative;
+    min-height: 100%;
+    
+    /*content view*/
+    /* .cv {
+    } */
+  }
+  
+  
+  /*globals*/
+  a,
+  a:focus,
+  a:hover {
+   text-decoration: none;
+  }
+  
+  .inbox {
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    
+    ul, li {
+      margin: 0;
+      padding: 0;
+    }
+    ul {    
+      li {
+        list-style: none;
+        a {
+          display: block;
+          padding: 10px 20px;
+        }
+      }
+    }
+  }
+  .msb, .mnb {
+      -moz-animation: slidein 300ms forwards;
+      -o-animation: slidein 300ms forwards;
+      -webkit-animation: slidein 300ms forwards;
+      animation: slidein 300ms forwards;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;  
+  }
+  .mcw {
+      -moz-animation: bodyslidein 300ms forwards;
+      -o-animation: bodyslidein 300ms forwards;
+      -webkit-animation: bodyslidein 300ms forwards;
+      animation: bodyslidein 300ms forwards;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;  
+  }
+
+  body.msb-x {
+  
+    .mcw, .mnb {
+      margin-left: 0;
+  -moz-animation: bodyslideout 300ms forwards;
+      -o-animation: bodyslideout 300ms forwards;
+      -webkit-animation: bodyslideout 300ms forwards;
+      animation: bodyslideout 300ms forwards;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+    }
+    .msb {
+      -moz-animation: slideout 300ms forwards;
+      -o-animation: slideout 300ms forwards;
+      -webkit-animation: slideout 300ms forwards;
+      animation: slideout 300ms forwards;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+    }
+  }
+  
+    /* Slide in animation
+    @-moz-keyframes slidein {
+      0% {
+        left: -200px;
+      }
+      100% {
+        left: 0;
+      }
+    }
+    @-webkit-keyframes slidein {
+      0% {
+        left: -200px;
+      }
+      100% {
+        left: 0;
+      }
+    }
+    @keyframes slidein {
+      0% {
+        left: -200px;
+      }
+      100% {
+        left: 0;
+      }
+    }
+    @-moz-keyframes slideout {
+      0% {
+        left: 0;
+      }
+      100% {
+        left: -200px;
+      }
+    }
+    @-webkit-keyframes slideout {
+      0% {
+        left: 0;
+      }
+      100% {
+        left: -200px;
+      }
+    }
+    @keyframes slideout {
+      0% {
+        left: 0;
+      }
+      100% {
+        left: -200px;
+      }
+    }
+  
+    @-moz-keyframes bodyslidein {
+      0% {
+        left: 0;
+      }
+      100% {
+        margin-left: 200px;
+      }
+    }
+    @-webkit-keyframes bodyslidein {
+      0% {
+        left: 0;
+      }
+      100% {
+        left:0
+      }
+    }
+    @keyframes bodyslidein {
+      0% {
+        margin-left: 0;
+      }
+      100% {
+        margin-left: 200px;
+      }
+    }
+    @-moz-keyframes bodyslideout {
+      0% {
+        margin-left: 200px;
+      }
+      100% {
+        margin-right: 0;
+      }
+    }
+    @-webkit-keyframes bodyslideout {
+      0% {
+        margin-left: 200px;
+      }
+      100% {
+        margin-left: 0;
+      }
+    }
+    @keyframes bodyslideout {
+      0% {
+        margin-left: 200px;
+      }
+      100% {
+        margin-left: 0;
+      }
+    } */
+
+    
+
+.projects {
+  background-color: #161718;
+  border-radius: 10px;
+}
+
+.btn-success {
+  background-color: #3b5f44;
+  color: #faecd4;
+  --bs-btn-border-color: #189b14;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0baf60;
+  --bs-btn-active-bg: #080808;
+  --bs-btn-active-color: #fff;
+
+}
+
+.btn-warning {
+  background-color: #897133;
+  color: #faecd4;
+  --bs-btn-active-bg: #080808;
+  --bs-btn-active-color: #fff;
+}
+
+.btn-stop {
+  background-color: #753332;
+  color: #faecd4;
+  --bs-btn-active-bg: #a01919;
+  --bs-btn-active-color: #fff;
+}
+
+.btn-delete {
+  background-color: #b12927;
+  color: #faecd4;
+  --bs-btn-active-bg: #080808;
+  --bs-btn-active-color: #fff;
+}
+
+.d-flex {
+  display: flex;
+  flex-direction: column; /* This will stack children vertically */
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+body {
+  color: #e0d3bb;
+  background-color: #22272e;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#timer {
+  font-size: 3rem;
+  color: #e0d3bb;
+}
+
+#emoji {
+  font-size: 3rem;
+}
+
+#timer-box {
+  background-color: #22272e;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+
+/*.form-label {*/
+/*    form-range-track-width: 50%;*/
+/*}*/
+
+.loco {
+  color: #fff;
+  padding: 5px;
+  /* background-color: rgb(28, 14, 34); */
+  border-radius: 10px;
+  width: auto; /* Allow width to adjust based on content */
+  max-width: 400px; /* Optional: limit the maximum width */
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the left */
+  margin: 0 auto;
+  /* word-wrap: break-word; Ensure long words break to fit within the max-width */
+}
+
+
+.slider {
+  width: 50% !important;
+  margin: 0 auto;
+}
+
+.main-container {
+  display: flex;
+  /* justify-content: center; Center .row horizontally */
+}
+
+.row {
+  width: 100%;
+}
+
+@media (max-width: 216px) {
+.loco {
+  flex-direction: column !important;
+}
+}
+
+/* .form-range {*/
+/*  width: 100%;*/
+/*  height: 1.5rem;*/
+/*  padding: 0;*/
+/*  background-color: transparent;*/
+/*  -webkit-appearance: none;*/
+/*  -moz-appearance: none;*/
+/*  appearance: none;*/
+/*} */
+
+.form-range::-webkit-slider-thumb {
+width: 1rem;
+height: 1rem;
+margin-top: -0.25rem;
+background-color: #ee8d17;
+border: 0;
+border-radius: 1rem;
+-webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+-webkit-appearance: none;
+appearance: none;
+}
+
+.form-range::-webkit-slider-thumb:active {
+background-color: #480ba4;
+}
+
+.form-range::-webkit-slider-runnable-track {
+width: 100%;
+height: 0.5rem;
+color: #480ba4;
+cursor: pointer;
+background-color: #687644;
+border-color: #480ba4;
+border-radius: 1rem;
+}
+
+
+
+ul {
+  display: block;
+  list-style-type: none;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 0px;
+  unicode-bidi: isolate;
+}
+
+
+.flash-message {
+  opacity: 1;
+  transition: opacity 1.6s ease-out;  /* Adjust transition duration and timing function as needed */
+}
+
+.flash-message.fading-out {
+  opacity: 0;
+}
+
+
+.alert-primary {
+  max-height: 20px;
+  width: 100%;
+  --bs-alert-color: #bdc9c3;
+  --bs-alert-bg: #0a0e0c;
+  --bs-alert-border-color: #0c0a07;
+  --bs-alert-link-color: #e0d3bb;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.chimichurri {
+  border-radius: 10px;
+  background-color: #161718;
+  border: 1px solid ;
+  /* background-color: rgb(30, 14, 35); */
+}
+
+.taskerini {
+  list-style-type: none;
+  margin-block-start: 10px;
+  margin-block-end: 20px;
+  border-left: 6px solid #0f0321;
+  align-items: center;
+  background-color: #2E4F4F;
+  
+}
+
+
+
+/* .form-select {
+  color: #FFF8DC;
+  background-color: rgb(0, 0, 0);
+} */
+
+/* .nav-link {
+  color: #e0dfdb;
+  list-style-type: none;
+  margin-block-start: 1px;
+  margin-block-end: 1px;
+  border-left: 6px solid #1c043f;
+  align-items: center;
+  background-color: #dfdfdf;
+} */
+
+.msb .nav-link {
+  display: block;
+  width: 100%;
+}
+
+.nav navbar-nav {
+  display: block;
+  width: 100%;
+}
+
+
+
+.rsb {
+  position: fixed;
+  right: 0;
+  width: 200px; /* Adjust as needed */
+  height: 100%;
+  background-color: #f8f9fa;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+
+/* Initial CSS for the sidebar */
+.sidebar {
+  width: 250px; /* Width of the sidebar */
+  position: fixed;
+  right: -250px; /* Start off-screen to the right */
+  top: 0;
+  transition: right 0.4s; /* Smooth transition for sliding effect */
+}
+
+/* CSS for the sidebar when it's visible */
+.sidebar.active {
+  right: 0; /* Bring the sidebar on-screen */
+}
+
+.project-sidebar {
+  background-color: rgb(0, 0, 0);
+}
+
+.task-sidebar {
+  background-color: rgb(20, 20, 20);
+}
+
+
+.btn-projects {
+  color: #FFF8DC;
+  background-color: #2e0947;
+  --bs-btn-hover-bg: #080808;
+}
+
+/* .play-button {
+  display: flex;
+  justify-content: flex-start;
+  width: 20px;
+  height: 20px;
+  --bs-btn-hover-bg: #cc3f26;
+} */
+
+/* .btn .play-button {
+  display: flex;
+  justify-content: flex-start;
+  width: 24px;
+  height: 24px;
+  transition: filter 0.3s ease;
+}
+
+.btn .play-button:hover {
+  filter: brightness(0) invert(1);
+}
+
+.btn-tasks {
+  color: #FFF8DC;
+  list-style-type: none;
+  margin-block-start: 10px;
+  margin-block-end: 20px;
+  border-left: 6px solid #0f0321;
+  align-items: center;
+  background-color: #DC6B19;
+}
+
+.btn-tasks {
+  display: block; 
+  width: 100%; 
+  box-sizing: border-box; 
+  --bs-btn-active-bg: #6C0345;
+  --bs-btn-active-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #55702a;
+} */
+
+
+.btn-tasks:hover {
+  background-color: #3282B8; /* Change background color on hover */
+  color:#f5f5f5
+}
+
+.btn .play-button {
+  display: flex;
+  justify-content: flex-start;
+  width: 24px;
+  height: 24px;
+  transition: filter 0.3s ease;
+  margin-right: 10px; /* Add some spacing between image and text */
+}
+
+.btn .play-button:hover {
+  filter: brightness(0) invert(1);
+}
+
+h4 {
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.container.text-center .projectContent {
+  text-align: left; /* Override the text-center alignment */
+  align-items: left;
+  padding: 10px 0px 10px 10px;
+}
+
+.container.text-center .projectContent .add_project {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+
+.container.text-center .projectContent .add_project form {
+  width: 98%; /* Make the form take full width */
+  display: flex; /* Use flexbox to align children horizontally */
+  flex-wrap: wrap; /* Allow wrapping if needed */
+}
+
+.container.text-center .projectContent .add_project input[type="text"],
+.container.text-center .projectContent .add_project input[type="submit"] {
+  flex: 1 1 auto; /* Allow the input and button to grow */
+  margin: 5px 5px 5px 5px; /* Optional: Add some margin for spacing */
+}
+
+.container.text-center .projectContent .add_project input[type="text"] {
+  flex: 4; /* Make the text input larger */
+}
+
+.container.text-center .projectContent .add_project input[type="submit"] {
+  flex: 1; /* Make the submit button smaller */
+}
+
+.project-in-task {
+  padding-right: 10px;
+  padding-left: 10px;
+  
+}
+
+.task-projects {
+  color: rgb(20, 20, 20);
+  background-color: #F5EEE6;
+}
+
+.incomplete-tasks{
+  background-color: #ffd13452;
+  color: rgb(179 56 56);
+  font-size: 18px;
+  font-style: oblique;
+  font-weight: 600;
+}
+
+.elapsed-time {
+  font-size: 16px;
+  font-style: oblique;
+  font-weight: 600;
+  
+}
+
+.completed-tasks {
+  color: rgb(30 57 1);
+  background-color: #0baf605e;
+  font-weight: 600;
+  font-size: 18px;
+  font-style: oblique;
+}
+
+.chimichurri .add_task form {
+  width: 98%; /* Make the form take full width */
+  display: flex; /* Use flexbox to align children horizontally */
+  flex-wrap: wrap; /* Allow wrapping if needed */
+}
+
+.projectContent .add_task input[type="text"],
+.projectContent .add_task input[type="submit"] {
+  flex: 1 1 auto; /* Allow the input and button to grow */
+  margin: 5px 5px 5px 5px; /* Optional: Add some margin for spacing */
+}
+
+.projectContent .add_task input[type="text"] {
+  flex: 4; /* Make the text input larger */
+}
+
+.task-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.btn-tasks {
+  flex-grow: 1; /* Allow the button to take available space */
+  position: relative; /* Ensure the button is the reference point for the checkbox */
+  display: flex; /* Use flexbox layout */
+  align-items: center; /* Align items vertically in the center */
+  justify-content: space-between; /* Ensure the checkbox and time are on the right */
+  color: #FFF8DC;
+  list-style-type: none;
+  margin-block-start: 10px;
+  margin-block-end: 10px;
+  background-color: #0F4C75;
+  padding: 10px; /* Add some padding */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+  width: 100%; /* Set the width to 100% of its parent */
+  cursor: pointer; /* Add cursor pointer for better UX */
+  text-align: left; /* Align text to the left */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.align-right-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  right: 0px; /* Adjust as needed to position within the button */
+}
+
+.align-right-checkbox {
+  margin-right: 10px; /* Adjust as needed */
+}
+
+.task-container {
+  margin-left: 20px;
+  align-items: center;
+
+}
+
+.task-time-dinamic {
+  white-space: nowrap; /* Prevent line break */
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 5px;
+  background-color: #0b010f;
+  margin-bottom: 5px;
+  color:rgb(218, 218, 218);
+  border-radius: 10px;
+}
+.uncheck-task {
+  text-decoration: line-through;
+}
+
+.task-completed {
+  opacity: 0.6;
+  background-color: #0d3a8f;
+  
+}
+
+.show-hide-task {
+  margin-top: 10px;
+  margin-left: -20px;
+  margin-bottom: 10px;
+}
+
+.title-timer {
+  font-size: 26px;
+}
+
+.check-wrapper {
+  position: relative; /* Ensure the wrapper is the reference point for positioning */
+  display: flex;
+  align-items: center;
+
+}
+
+.complete-task-div {
+  display: none;
+}
+
+.no-complete {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  color: #f0f0f0;
+  background-color: #0baf60;
+}
+
+.no-bullets {
+  list-style-type: none; /* Removes the bullets */
+  padding: 0;
+  margin: 0;
+}
+
+.btn-tasks {
+  transition: background-color 0.1s ease; /* Apply a transition to the background color */
+}
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  /* overflow: auto; Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #360553;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #591499;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 500px; /* Set a max width for larger screens */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #3b5f44;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #0c3750;
+}
+
+/* Modal buttons */
+#proceedBtn, #cancelBtn {
+  margin-top: 10px;
+}
+
+.form-check-input {
+
+  &:checked {
+    background-color: #189c2a;
+    border-color: #001b07;
+  }
+}

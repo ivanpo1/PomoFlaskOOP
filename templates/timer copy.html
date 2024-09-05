@@ -1,0 +1,132 @@
+{% extends "layout.html" %} {% block title %} Timer {% endblock %} 
+{% block main %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-10">
+      <label for="amountMinutes" class="form-label loco title-timer">Minutes</label>
+      <div class="d-flex flex-row justify-content-center align-items-center">
+        <input type="range" class="form-range slider" min="0" max="50" step="1" id="amountMinutes" />
+      </div>
+      <div class="d-flex flex-columns justify-content-center align-items-center gap-10" id="timer-box">
+        <div id="timer">00:00</div>
+        <div id="emoji"></div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="d-flex flex-row justify-content-center align-items-center loco">
+        <button type="button" class="btn btn-success">Start</button>
+        <button type="button" class="btn btn-warning">Pause</button>
+        <button type="button" class="btn btn-stop">Stop</button>
+      </div>
+
+      <hr>
+
+      <!-- Project Selection -->
+      <div class="mx-auto loco projects">
+        <div class="d-flex flex-row justify-content-center align-items-center loco">
+          <label for="project-selector">Projects:</label>
+          <select class="form-select mx-auto w-auto" id="project-selector">
+            <option disabled selected>Select a Project!</option>
+            {% for project in projects %}
+            <option value="{{ project['id'] }}" class="project_id">
+              {{ project['name'] }}
+            </option>
+          {% endfor %}
+          </select>
+        </div>
+        {% if project_exists %}
+        <div class="alert alert-primary mb-0 text-center flash-message" role="alert">
+          Project already exists!
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Add project button -->
+      <div class="d-flex flex-row justify-content-center align-items-center loco">
+        <form action="{{ url_for('add_project') }}" method="POST">
+          <input class="align-items-center" type="text" name="add_project" placeholder="New project"
+            required="required" />
+          <!-- <input type="hidden" name="project_selection" value="{{ selected_project }}" /> -->
+          <input type="submit" value="Add" />
+        </form>
+      </div>
+
+      <!-- List avaible tasks -->
+      <div class="mx-auto loco chimichurri">
+        <p>Tasks:</p>
+        <div class="d-flex flex-row justify-content-right align-items-right loco">
+          <ul style="width: 90%">
+            <div>
+              {% for task in tasks %}
+
+              <li>
+                <button class="btn btn-tasks" data-task-id="{{ task.id }}" data-project-id="{{ task.project_id }}">
+                  {{ task.name }}                  
+                </button>
+              </li>
+
+              {% endfor %}
+            </div>
+          </ul>
+        </div>
+        {% if get_flashed_messages() %}
+        <div class="alert alert-primary mb-0 text-center task-added" role="alert">
+          {{ get_flashed_messages() | join(" ") }}
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Add task button -->
+      <div class="d-flex flex-row justify-content-center align-items-center loco">
+        <form action="{{ url_for('add_task') }}" method="POST">
+          <input class="align-items-center" type="text" name="name_task" placeholder="New task" required="required" />
+          <input type="hidden" name="current_project_id" value="{{ session['current_project_id'] }}" />
+          <input type="submit" value="Add" />
+        </form>
+      </div>
+
+      <!-- SIDEBAR -->
+    </div>
+    <div class="col-md-2 sidebar" id="sidebar">
+      {% if session['current_project_id'] %}
+
+      <ul>
+        <div class="project-sidebar">
+          <hr> 
+          <h4>Project:</h4>
+          <hr> 
+          <li class="project-name"></li>
+          <li class="project-id"></li>
+          <li class="project-complete"></li>
+          <li class="project-created-at"></li>
+          <li class="project-pomodoros"></li>
+          <li class="project-time"></li>
+        </div>
+        <div class="task-sidebar" id="task-sidebar">
+          <hr> 
+          <h4>Task:</h4>
+          <hr> 
+          <li class="task-name"></li>
+          <li class="task-id"></li>
+          <li class="task-complete"></li>
+          <li class="task-created-at"></li>
+          <li class="task-pomodoros"></li>
+          <li class="task-time"></li>
+        </div>
+
+        
+      </ul>
+      {% else %}
+      <p>No project selected.</p>
+      <li class="project-name"></li>
+      <li class="project-id"></li>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+{% endblock %}

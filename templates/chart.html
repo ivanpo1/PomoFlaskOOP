@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Graphs
+{% endblock %}
+    
+{% block main %}
+
+<div>
+    <canvas id="projectsChart"></canvas>
+</div>
+  
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+{% endblock %}
+
+
+
+

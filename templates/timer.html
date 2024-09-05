@@ -1,0 +1,224 @@
+{% extends "layout.html" %}
+{% block head %} 
+<title>{% block title %}Timer{% endblock %}</title>
+<script defer type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script defer type="module" src="{{ url_for('static', filename='js/timer.js') }}"></script>
+<!-- <script defer type="module" src="{{ url_for('static', filename='js/oop.js') }}"></script> -->
+{% endblock %}
+
+{% block main %}
+<div class="container">
+  <div id="warningModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Changing tasks or projects will reset the timer. Do you want to proceed? (Cancel and Stop, to save progress)</p>
+      <button id="proceedBtn">Proceed</button>
+      <button id="cancelBtn">Cancel</button>
+    </div>
+</div>
+
+
+  <div class="col-md-10">
+    <label for="sliderMinutes" class="form-label loco align-items-center title-timer">Minutes</label>
+    <div class="d-flex flex-row justify-content-center align-items-center">
+      <input type="range" class="form-range slider" min="0" max="50" step="1" id="sliderMinutes" />
+    </div>
+    <div class="d-flex flex-columns justify-content-center align-items-center gap-10" id="timer-box">
+      <div id="timer">00:00</div>
+      <div id="emoji"></div>
+    </div>
+
+    
+
+    <!-- Buttons -->
+    <div class="d-flex flex-row justify-content-center align-items-center loco">
+      <button type="button" class="btn btn-success">Start</button>
+      <button type="button" class="btn btn-warning">Pause</button>
+      <button type="button" class="btn btn-stop">Stop</button>
+    </div>
+
+    <hr />
+
+
+
+    <!-- Project Selection -->
+    <div class="container text-center">
+      <div class="row">
+        <div class="col">
+          <div class="mx-auto chimichurri">
+            <div class="projectContent mx-auto projects">
+              <div class="projectContent-header">
+                <h4>Projects</h4>
+              </div>
+              <!-- Add project button -->
+              <div class="add_project">
+                <form action="{{ url_for('add_project') }}" method="POST">
+                  <input type="text" name="add_project" placeholder="Add a project, press [Enter] to submit"
+                    required="required" />
+                  <!-- <input type="hidden" name="project_selection" value="{{ selected_project }}" /> -->
+
+                </form>
+              </div>
+
+              <div class="mx-auto w-auto projects-container" id="project-selector">
+                {% for project in projects %}
+
+                <ul>
+                  <button class="btn btn-projects" class="project_id" data-project-id="{{ project['id'] }}">
+                    {{ project['name'] }}
+                  </button>
+
+
+                </ul>
+
+                {% endfor %}
+              </div>
+
+              {% if project_exists %}
+              <div class="alert alert-primary mb-0 text-center flash-message" role="alert">
+                Project already exists!
+              </div>
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
+
+        
+
+
+        <!-- List avaible tasks -->
+        <div class="col">
+          <div class="mx-auto chimichurri">
+            
+              <h4 class="title-tasks">Tasks</h4>
+              <hr style="margin-bottom: 0px;">
+
+              <div class="d-flex flex-row justify-content-center align-items-center task-projects">
+                <div class="project-in-task">
+                  <div class="incomplete-tasks"></div>
+                  <span>Tasks to Complete</span>
+                </div>
+                <div class="project-in-task">
+                  <div class="elapsed-time"></div>
+                  <span>Elapsed Time</span>
+                </div>
+                <div class="project-in-task">
+                  <div class="completed-tasks"></div>
+                  <span>Completed Tasks</span>
+                </div>
+              </div>
+              <hr style="margin-top: 0px;">
+
+
+              <!-- Add task button -->
+              <div class="projectContent mx-auto projects"> 
+              <div class="add_task">
+                <form action="{{ url_for('add_task') }}" method="POST">
+                  <input type="text" name="name_task" placeholder="Add a Task, press [Enter] to submit" required="required" />
+                  <input type="hidden" name="current_project_id" value="{{ session['current_project_id'] }}" />
+                  <!-- <input type="submit" value="+" /> -->
+                </form>
+              </div>
+            </div> 
+            {% if get_flashed_messages() %}
+            <div class="alert alert-primary mb-0 text-center task-added" role="alert">
+              {{ get_flashed_messages() | join(" ") }}
+            </div>
+            {% endif %}
+            <div class="flex-column task-container" >
+              <div class="incomplete-task-div">
+                <ul style="width: 90%" class="ul-task-list-incomplete no-bullets">
+                  <div>
+                    {% for task in tasks %}
+                      {% if task.complete == False %}
+                        <li>
+                          <div class="task-wrapper">
+                            <button class="btn btn-tasks" data-task-id="{{ task.id }}" data-project-id="{{ task.project_id }}">
+                              <img class="play-button" src="static/img/play-button-30.png" alt="Play" onclick="startCountdown()" />
+                              {{ task.name }}
+                            </button>
+                            <input type="checkbox" data-task-id="{{ task.id }}" data-project-id="{{ task.project_id }}" value="incomplete_checkbox" class="align-right-checkbox check-task" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Mark to complete"/>
+                          </div>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </ul>
+                <div class="show-hide-task">
+                  <button class="btn btn-light show-tasks">Show completed Tasks</button>
+                </div>
+              </div>
+      
+              <div class="complete-task-div">
+                  <ul style="width: 90%" class="ul-task-list-complete no-bullets">
+                    {% if has_complete_task %}
+                      {% for task in tasks %}
+                        {% if task.complete == True %}
+                          <div class="check-wrapper">
+                            <button class="btn btn-tasks task-completed" data-task-id="{{ task.id }}" data-project-id="{{ task.project_id }}">
+                              {{ task.name }}
+                            </button>
+                            <input type="checkbox" data-task-id="{{ task.id }}" data-project-id="{{ task.project_id }}" value="complete_checkbox" class="align-right-checkbox uncheck-task" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Unmark to restore"/>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                        <div class="no-complete">There's no completed Tasks</div>
+                    {% endif %}
+                  </ul>
+              </div>
+            </div>
+            
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  
+
+    <!-- SIDEBAR -->
+  </div>
+  <div class="col-md-2 sidebar" id="task-sidebar">
+    <div class="task-sidebar">
+      <hr />
+      <h4>Task:</h4>
+      <hr />
+      <li class="task-name"></li>
+      <li class="task-id"></li>
+      <li class="task-complete"></li>
+      <li class="task-created-at"></li>
+      <li class="task-pomodoros"></li>
+      <li class="task-time"></li>
+    </div>
+  </div>
+
+  <div class="col-md-2 sidebar" id="project-sidebar">
+    <div class="project-sidebar">
+      <hr />
+      <h4>Project:</h4>
+      <hr />
+      <li class="project-name"></li>
+      <li class="project-id"></li>
+      <li class="project-complete"></li>
+      <li class="project-created-at"></li>
+      <li class="project-pomodoros"></li>
+      <li class="project-time"></li>
+    </div>
+  </div>
+
+
+
+</div>
+
+<!-- <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/timer.js') }}"></script> -->
+<script text="javascript">
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))</script>
+
+{% endblock %}
+
+
