@@ -102,17 +102,37 @@ def register_routes(app, db):
 
 
     @login_required
-    @app.route("/delete/<task_id>", methods=["DELETE"])
-    def delete(task_id):
+    @app.route("/delete_task/<task_id>", methods=["DELETE"])
+    def delete_task(task_id):
+        try:
+            task = Task.query.get(task_id)
+            if not task:
+                return jsonify({'success': False, 'message': f'Task {task_id} not found'}), 404
+            db.session.delete(task)
+            db.session.commit()
+            return jsonify({'success': True, 'message': f'Task {task_id} deleted successfully'})
+        except Exception as e:
+            return jsonify({'success': False, 'message': 'Error deleting task', 'error': str(e)}), 500
+    
 
-        # Search for inputted task. Delete from Database.
+    @login_required
+    @app.route("/delete_project/<project_id>", methods=["DELETE"])
+    def delete_project(project_id):
+        try:
+            project = Project.query.get(project_id)
+            if not project:
+                return jsonify({'success': False, 'message': f'Project {project_id} not found'}), 404
+            
+            # Manually delete associated tasks
+            Task.query.filter_by(project_id=project_id).delete()
+            
+            db.session.delete(project)
+            db.session.commit()
+            
+            return jsonify({'success': True, 'message': f'Project {project_id} and its tasks deleted successfully'})
+        except Exception as e:
+            return jsonify({'success': False, 'message': 'Error deleting project', 'error': str(e)}), 500
 
-        Task.query.filter(Task.id == task_id).delete()
-        db.session.commit()
-        # tasks = Task.query.all()
-
-        # return render_template('timer.html')
-        return jsonify({'success': True, 'message': f'Task {task_id} deleted successfully'})
 
 
 

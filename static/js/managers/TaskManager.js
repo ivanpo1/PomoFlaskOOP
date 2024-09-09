@@ -135,7 +135,7 @@ export default class TaskManager {
       const taskId = e.dataset.taskId;
       const projectId = e.dataset.projectId;
       try {
-        const response = await fetch(`/delete/${taskId}`, {
+        const response = await fetch(`/delete_task/${taskId}`, {
           method: "DELETE",
         });
         const data = await response.json();

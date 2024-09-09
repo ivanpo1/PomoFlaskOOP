@@ -39,30 +39,41 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.target.classList.contains("show-tasks")) {
         uiManager.showCompletedTask(event.target);
       }
+
       if (event.target.classList.contains("btn-delete")) {
         taskManager.deleteTask(event.target);
       }
+
+      if (event.target.classList.contains("btn-delete-task")) {
+        taskManager.deleteTask(event.target);
+      }
+      
+      
     });
-
+    
     const projectsContainer = document.querySelector('.projects-container');
-
+    
     // Event delegation for project buttons
     projectsContainer.addEventListener('click', (event) => {
-        // Check if the clicked element is a project button
-        if (event.target.classList.contains('btn-projects')) {
-            projectManager.handleBtnProjectClick(event.target);
-        }
+      // Check if the clicked element is a project button
+      if (event.target.classList.contains('btn-projects')) {
+        projectManager.handleBtnProjectClick(event.target);
+      }
+      
+      if (event.target.classList.contains("btn-delete-project")) {
+        projectManager.deleteProject(event.target);
+      }
     });
   });
 
   // console.log(projectManager.fetchProjectData(sessionStorage.getItem("selectedProjectId")))
 
-  async function initPage() {
-    const selectedProjectId = sessionStorage.getItem("selectedProjectId");
-    if (selectedProjectId) {
-        const projectData = await projectManager.fetchProjectData(selectedProjectId);
-        await uiManager.updateProjectInfoBox(projectData);
-    }
-}
+//   async function initPage() {
+//     const selectedProjectId = sessionStorage.getItem("selectedProjectId");
+//     if (selectedProjectId) {
+//         const projectData = await projectManager.fetchProjectData(selectedProjectId);
+//         await uiManager.updateProjectInfoBox(projectData);
+//     }
+// }
 
-document.addEventListener("DOMContentLoaded", initPage);
+// document.addEventListener("DOMContentLoaded", initPage);

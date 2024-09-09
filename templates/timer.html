@@ -60,13 +60,15 @@
                 </form>
               </div>
 
-              <div class="mx-auto w-auto projects-container" id="project-selector">
+              <div class="mx-auto w-auto projects-container dropdown" id="project-selector">
                 {% for project in projects %}
 
                 <ul>
                   <button class="btn btn-projects" class="project_id" data-project-id="{{ project['id'] }}">
                     {{ project['name'] }}
                   </button>
+
+                  <button class="btn-delete-project" data-project-id="{{ project['id'] }}"> X </button>
 
 
                 </ul>

@@ -35,6 +35,8 @@ export default class ProjectManager {
   
     async handleBtnProjectClick(button) {
 
+      console.log('handleBtnProjectClick pressed')
+
       try {   
         const projectId = button.getAttribute("data-project-id");
 
@@ -59,6 +61,27 @@ export default class ProjectManager {
         }
       } catch (error) {
         console.error("Error fetching project data:", error)
+      }
+    }
+
+    async deleteProject(e) {
+
+      const projectId = e.dataset.projectId;
+
+      console.log(projectId)
+      try {
+        const response = await fetch(`/delete_project/${projectId}`, {
+          method: "DELETE",
+        });
+        const data = await response.json();
+  
+        if (data.error) {
+          console.error(`Failed to delete item with Project ID: ${projectId}`);
+        } else {
+          window.location.href = "/timer";
+        }
+      } catch (error) {
+        console.error(`Error deleting Task ID: ${projectId}`);
       }
     }
 }

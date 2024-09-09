@@ -256,7 +256,7 @@ export default class UIManager {
               <div class="task-time-dinamic">${this.timeToString(
                 task.time
               )}</div>
-              <button class="btn-delete" data-task-id="${task.id}" data-project-id="${task.project_id}"> X </button>
+              <button class="btn-delete-task" data-task-id="${task.id}" data-project-id="${task.project_id}"> X </button>
           </div>
       `;
     return taskItem;

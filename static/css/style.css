@@ -657,14 +657,16 @@ h4 {
 .task-projects {
   color: rgb(20, 20, 20);
   background-color: #F5EEE6;
+  
 }
 
-.incomplete-tasks{
+.incomplete-tasks {
   background-color: #ffd13452;
-  color: rgb(179 56 56);
-  font-size: 18px;
+  color: rgb(228, 1, 1);
+  font-size: 22px;
   font-style: oblique;
   font-weight: 600;
+  -webkit-text-stroke: 0.7px rgb(0, 0, 0);
 }
 
 .elapsed-time {
@@ -675,11 +677,12 @@ h4 {
 }
 
 .completed-tasks {
-  color: rgb(30 57 1);
-  background-color: #0baf605e;
+  color: rgb(0, 158, 47);
+  background-color: #00ff845b;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 22px;
   font-style: oblique;
+  -webkit-text-stroke: 0.7px rgb(0, 0, 0);
 }
 
 .chimichurri .add_task form {
