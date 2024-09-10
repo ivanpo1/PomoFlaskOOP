@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (event.target.classList.contains("btn-delete-task")) {
         uiManager.taskToDelete = event.target;
-        uiManager.showDeleteModal();
+        uiManager.showDeleteModal("Task");
         // taskManager.deleteTask(event.target);
       }
       
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.target.classList.contains("btn-delete-project")) {
         // projectManager.deleteProject(event.target);
         uiManager.projectToDelete = event.target;
-        uiManager.showDeleteModal();
+        uiManager.showDeleteModal("Project");
       }
     });
 

@@ -347,7 +347,8 @@ export default class UIManager {
   }
 
     // Function to show the modal
-  showDeleteModal() {
+  showDeleteModal(what) {
+    document.querySelector(".modal-text").innerText = `Are you sure you want to delete this ${what}?`;
     deleteModal.style.display = 'flex'; // Show modal (flex centers it)
   }
 
@@ -356,5 +357,5 @@ export default class UIManager {
     deleteModal.style.display = 'none';
   }
 
-  
+
 }
