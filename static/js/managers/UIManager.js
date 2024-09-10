@@ -7,6 +7,9 @@ export default class UIManager {
     this.taskDiv = document.querySelector(".show-task-div");
     this.showTaskDiv = document.querySelector(".show-tasks");
     this.spinnerTimeouts = {};
+    this.deleteModal = document.getElementById('deleteModal');
+    this.confirmDeleteBtn = document.getElementById('confirmDelete');
+    this.cancelDeleteBtn = document.getElementById('cancelDelete');
   }
 
   updateButtonStyles(type, button, previousButton) {
@@ -342,4 +345,16 @@ export default class UIManager {
       }
     }
   }
+
+    // Function to show the modal
+  showDeleteModal() {
+    deleteModal.style.display = 'flex'; // Show modal (flex centers it)
+  }
+
+  // Function to hide the modal
+  hideDeleteModal() {
+    deleteModal.style.display = 'none';
+  }
+
+  
 }

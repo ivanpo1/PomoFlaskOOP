@@ -17,6 +17,8 @@ export default class StateManager {
       previousTaskClickedButton: null,
       isTaskDivVisible: false,
     };
+    this.projectToDelete = null;
+    this.taskToDelete = null;
     this.projectData = {};
   }
 

@@ -40,12 +40,14 @@ document.addEventListener("DOMContentLoaded", () => {
         uiManager.showCompletedTask(event.target);
       }
 
-      if (event.target.classList.contains("btn-delete")) {
-        taskManager.deleteTask(event.target);
-      }
+      // if (event.target.classList.contains("btn-delete")) {
+      //   taskManager.deleteTask(event.target);
+      // }
 
       if (event.target.classList.contains("btn-delete-task")) {
-        taskManager.deleteTask(event.target);
+        uiManager.taskToDelete = event.target;
+        uiManager.showDeleteModal();
+        // taskManager.deleteTask(event.target);
       }
       
       
@@ -61,8 +63,32 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       
       if (event.target.classList.contains("btn-delete-project")) {
-        projectManager.deleteProject(event.target);
+        // projectManager.deleteProject(event.target);
+        uiManager.projectToDelete = event.target;
+        uiManager.showDeleteModal();
       }
+    });
+
+    const confirmDeleteBtn = document.getElementById("confirmDelete");
+    confirmDeleteBtn.addEventListener("click", () => {
+      if (uiManager.projectToDelete) {
+        console.log("Delete confirmed", uiManager.projectToDelete);
+        projectManager.deleteProject(uiManager.projectToDelete);
+        uiManager.hideDeleteModal();
+        uiManager.projectToDelete = null;
+      }
+
+      if (uiManager.taskToDelete) {
+        console.log("Delete confirmed", uiManager.taskToDelete);
+        taskManager.deleteTask(uiManager.taskToDelete);
+        uiManager.hideDeleteModal();
+        uiManager.taskToDelete = null;
+      }
+    });
+
+    const cancelDeleteBtn = document.getElementById('cancelDelete');
+    cancelDeleteBtn.addEventListener('click', () => {
+      uiManager.hideDeleteModal();
     });
   });
 
