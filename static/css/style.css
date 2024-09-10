@@ -851,8 +851,18 @@ h4 {
 
 /* Modal content */
 .modal-content {
-  background-color: white;
+  width: auto;
+  height: auto;
+  max-width: 90%;
+  max-height: 90%;
+  background-color: rgb(58, 58, 58);
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+}
+
+.modal-text {
+  font-size: 18px; /* Adjust text size */
+  line-height: 1.5; /* Adjust line spacing */
+  color: #e6e6e6; /* Adjust text color */
 }
