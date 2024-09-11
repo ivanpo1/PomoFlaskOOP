@@ -30,7 +30,8 @@ export default class TaskManager {
 
     async addTask(taskName) {
       try {
-        const response = await fetch(`/add_task/${taskName}/${this.stateManager.state.selectedProjectId}`, {
+        const encodedTaskName = encodeURIComponent(taskName);
+        const response = await fetch(`/add_task/${encodedTaskName}/${this.stateManager.state.selectedProjectId}`, {
           method: 'POST', // Specify that you're using POST
           headers: {
             'Content-Type': 'application/json', // This ensures JSON data is expected
