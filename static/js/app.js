@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // validate the form
     let taskName = addTaskForm.elements["name_task"].value;
     const task = await taskManager.addTask(taskName)
+    addTaskForm.reset();
     if (task) {
       // Example of adding the task to the UI
       const taskItem = uiManager.createTaskItem(task, false); // Assuming new task is not completed
