@@ -92,6 +92,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  const addTaskForm = document.querySelector('#addTaskForm')
+  addTaskForm.addEventListener("submit", async function (event) {
+    // stop form submission
+    event.preventDefault();
+  
+    // validate the form
+    let taskName = addTaskForm.elements["name_task"].value;
+    const task = await taskManager.addTask(taskName)
+    if (task) {
+      // Example of adding the task to the UI
+      const taskItem = uiManager.createTaskItem(task, false); // Assuming new task is not completed
+      taskItem.classList.add('fade-in');
+      document.querySelector(".ul-task-list-incomplete").prepend(taskItem); // Add the task to the top of the list
+
+      setTimeout(() => {
+        taskItem.classList.add('visible');
+      }, 10);
+    }
+  });
+
   // console.log(projectManager.fetchProjectData(sessionStorage.getItem("selectedProjectId")))
 
 //   async function initPage() {

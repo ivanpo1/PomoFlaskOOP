@@ -67,38 +67,34 @@ def register_routes(app, db):
 
 
     @login_required
-    @app.route("/add_task", methods=['GET', 'POST'])
-    def add_task():
-        
-        if request.method == 'GET':
-            tasks = Task.query.all()
-            projects = Project.query.all()
-
-            return render_template("timer.html", projects=projects, tasks=tasks)
-        
-        elif request.method == 'POST':
-            name_task = request.form.get('name_task')
-
-            if not name_task:
-                return render_template("timer.html", projects=projects, tasks=tasks)
+    @app.route("/add_task/<task_name>/<project_id>", methods=['POST'])
+    def add_task(task_name, project_id):
+        if request.method == 'POST':
+            # Check if task_name is empty
+            if not task_name:
+                return jsonify({'error': 'Adding Task Failed: Task name is required'}), 400
             
-            # Create task on Database.
-            else:
-                
-                current_project_id = request.form.get('current_project_id')
-                # current_project = db.select(Project).where(Project.name == selected_project)
-                # print(current_project_id)
-                current_project = Project.query.filter_by(id=current_project_id).first()
-                task = Task(name=name_task, project_id=current_project.id, complete=False)
-                
-                db.session.add(task)
-                db.session.commit()
-                flash(f"Task added!")
+            # Find the project by project_id
+            current_project = Project.query.filter_by(id=project_id).first()
+            
+            # Check if the project exists
+            if not current_project:
+                return jsonify({'error': 'Project not found'}), 404
 
-                tasks = Task.query.filter(Task.project_id == current_project.id)
-                projects = Project.query.all()
-                
-                return render_template("timer.html", projects=projects, tasks=tasks, current_project_id=current_project.id)
+            # Create new task
+            task = Task(name=task_name, project_id=current_project.id, complete=False)
+            
+            db.session.add(task)
+            db.session.commit()
+
+            task = task.to_dict()  # Convert task to dictionary
+
+            if task:
+                # Successfully created the task
+                return jsonify(task), 201
+            else:
+                # Something went wrong when converting or committing
+                return jsonify({'error': 'Adding Task Failed'}), 500
 
 
     @login_required
