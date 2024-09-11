@@ -124,10 +124,8 @@
               <!-- Add task button -->
               <div class="projectContent mx-auto projects"> 
               <div class="add_task">
-                <form action="{{ url_for('add_task') }}" method="POST">
+                <form action="" method="POST" id="addTaskForm">
                   <input type="text" name="name_task" placeholder="Add a Task, press [Enter] to submit" required="required" />
-                  <input type="hidden" name="current_project_id" value="{{ session['current_project_id'] }}" />
-                  <!-- <input type="submit" value="+" /> -->
                 </form>
               </div>
             </div> 

@@ -28,6 +28,31 @@ export default class TaskManager {
         };
     }
 
+    async addTask(taskName) {
+      try {
+        const response = await fetch(`/add_task/${taskName}/${this.stateManager.state.selectedProjectId}`, {
+          method: 'POST', // Specify that you're using POST
+          headers: {
+            'Content-Type': 'application/json', // This ensures JSON data is expected
+          }
+        });
+    
+        const data = await response.json();
+    
+        if (data.error) {
+          console.error("Error adding task: ", data.error);
+          return null;
+        } else {
+          console.log("addTask successful, task:", data)
+          return data;
+        }
+      } catch (error) {
+        console.error("Error adding task: ", error);
+        return null;
+      }
+    }
+    
+
   
     async handleBtnTaskClick(button) {
       try {
