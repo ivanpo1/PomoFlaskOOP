@@ -1,10 +1,12 @@
 import { state } from "./managers/StateManager.js";
 
 export class Timer {
-  constructor(pomoTime, restTime, stateManager) {
+  constructor(pomoTime, stateManager) {
     this.stateManager = stateManager;
-    this.pomoTime = pomoTime;
-    this.restTime = restTime;
+    this.pomoTime = 25 * 60 * 1000;
+    this.shortRestTime = 5 * 60 * 1000;
+    this.longRestTime = 30 * 60 * 1000;
+    this.untilLongRest = 4;
     this.currentTime = pomoTime;
     this.remainingTime = 0;
     this.startTime = 0;
@@ -15,6 +17,7 @@ export class Timer {
     this.timerElement = document.getElementById("timer");
     this.timerBox = document.getElementById("timer-box");
     this.sliderMinutes = document.getElementById("sliderMinutes");
+    this.sessions = 0;
 
     this.init();
   }
@@ -114,8 +117,14 @@ export class Timer {
     }, 100);
   }
 
+
   updateCountdown(pTime) {
     if (pTime <= 0) {
+      if (this.sessions === this.untilLongRest) {
+        switchMode('longBreak')
+      }
+      this.sessions++;
+
       this.timerElement.innerText = "00:00";
       this.timerBox.style.backgroundColor = "#531625";
       this.sendDataFlask(this.startTime);
@@ -123,7 +132,7 @@ export class Timer {
       document.querySelector('.title-timer').innerText = 'Rest';
       this.timerBox.style.backgroundColor = "#2b405e";
       this.stateManager.state.isTimerRunning = false;
-      this.updateCountdown(this.restTime);
+      this.updateCountdown(this.shortRestTime);
     } else {
       let minutes = Math.floor(pTime / 60 / 1000)
         .toString()
