@@ -12,7 +12,7 @@ const uiManager = new UIManager(stateManager);
 // Pass StateManager to other managers
 const projectManager = new ProjectManager(stateManager, uiManager);
 const taskManager = new TaskManager(stateManager, uiManager, projectManager);
-const timer = new Timer(1500000, 60000, stateManager)
+const timer = new Timer(stateManager)
 
 export { projectManager, taskManager, uiManager, timer };
 
