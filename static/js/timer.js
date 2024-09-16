@@ -3,10 +3,17 @@ import { state } from "./managers/StateManager.js";
 export class Timer {
   constructor(pomoTime, stateManager) {
     this.stateManager = stateManager;
-    this.pomoTime = 25 * 60 * 1000;
-    this.shortRestTime = 5 * 60 * 1000;
-    this.longRestTime = 30 * 60 * 1000;
-    this.untilLongRest = 4;
+    this.timerMode = {
+      pomodoro: 25,
+      shortRest: 5,
+      longRest: 30,
+      session: 0,
+      untilLongRest: 4,
+    } 
+    // this.pomoTime = 25 * 60 * 1000;
+    // this.shortRestTime = 5 * 60 * 1000;
+    // this.longRestTime = 30 * 60 * 1000;
+    // this.untilLongRest = 4;
     this.currentTime = pomoTime;
     this.remainingTime = 0;
     this.startTime = 0;
@@ -29,20 +36,27 @@ export class Timer {
     const pauseButton = document.querySelector(".btn-warning");
     const stopButton = document.querySelector(".btn-stop");
 
-    this.sliderMinutes.addEventListener(
-      "input",
-      this.updateSliderMinutes.bind(this)
-    );
+    // this.sliderMinutes.addEventListener(
+    //   "input",
+    //   this.updateSliderMinutes.bind(this)
+    // );
     startButton.addEventListener("click", this.startCountdown.bind(this));
     pauseButton.addEventListener("click", this.pauseCountdown.bind(this));
     stopButton.addEventListener("click", this.stopCountdown.bind(this));
   }
 
-  updateSliderMinutes() {
-    this.timerBox.style.backgroundColor = "#22272e";
-    this.currentTime = Math.round(this.sliderMinutes.value * 60 * 1000);
-    this.updateCountdown(this.currentTime);
-  }
+  setTimerMode(mode, value) {
+    if (this.timerMode.hasOwnProperty(mode)) {
+      this.timerMode[mode] = value;
+    } else {
+      console.error(`${mode} is not a valid timer mode`);
+    }}
+
+  // updateSliderMinutes() {
+  //   this.timerBox.style.backgroundColor = "#22272e";
+  //   this.currentTime = Math.round(this.sliderMinutes.value * 60 * 1000);
+  //   this.updateCountdown(this.currentTime);
+  // }
 
   startCountdown() {
     if (this.stateManager.state.isTimerRunning) return;
@@ -116,6 +130,7 @@ export class Timer {
       }
     }, 100);
   }
+
 
 
   updateCountdown(pTime) {

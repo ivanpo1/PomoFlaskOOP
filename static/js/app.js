@@ -19,6 +19,24 @@ export { projectManager, taskManager, uiManager, timer };
 // initializeEventListeners();
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    const timerSettings = document.querySelector(".settings-timer");
+
+    timerSettings.addEventListener("input", (event) => {
+
+      const { name, value } = event.target;
+
+      if (name && value) {
+        const numericValue = parseInt(value, 10);
+
+
+        timer.setTimerMode(name, numericValue);
+
+        console.log(`Setting ${name} to ${numericValue}`);
+      }
+
+    });
+
     const tasksContainer = document.querySelector(".task-container");
   
     // Event delegation: handle clicks on task buttons
