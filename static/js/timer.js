@@ -3,18 +3,16 @@ import { state } from "./managers/StateManager.js";
 export class Timer {
   constructor(stateManager) {
     this.stateManager = stateManager;
-    this.timerMode = {
+    this.timer = {
       pomodoro: 25,
       shortRest: 5,
       longRest: 30,
       session: 0,
       untilLongRest: 4,
+      mode: 'pomodoro',
     } 
-    // this.pomoTime = 25 * 60 * 1000;
-    // this.shortRestTime = 5 * 60 * 1000;
-    // this.longRestTime = 30 * 60 * 1000;
-    // this.untilLongRest = 4;
-    this.currentTime = this.timerMode['pomodoro'] * 60 * 1000;
+
+    this.currentTime = this.timer['pomodoro'] * 60 * 1000;
     this.remainingTime = 0;
     this.startTime = 0;
     this.elapsedTime = 0;
@@ -29,7 +27,7 @@ export class Timer {
   }
 
   init() {
-    this.updateCountdown(this.timerMode['pomodoro'] * 60 * 1000);
+    this.updateCountdown(this.timer['pomodoro'] * 60 * 1000);
 
 
     const startButton = document.querySelector(".btn-success");
@@ -41,9 +39,35 @@ export class Timer {
     stopButton.addEventListener("click", this.stopCountdown.bind(this));
   }
 
+  switchTimer(mode) {
+    switch (mode) {
+      case 'pomodoro':
+        // Switch to rest period based on session count
+        if (this.timer.session >= this.timer.untilLongRest) {
+          this.currentTime = this.timer.longRest * 60 * 1000; // Long Rest
+          this.timer.mode = 'longRest';
+          this.timer.session = 0; // Reset session count after long rest
+        } else {
+          this.currentTime = this.timer.shortRest * 60 * 1000; // Short Rest
+          this.timer.mode = 'shortRest';
+        }
+        break;
+
+      case 'shortRest':
+      case 'longRest':
+        // After rest, switch back to pomodoro
+        this.currentTime = this.timer.pomodoro * 60 * 1000; // Pomodoro
+        this.timer.mode = 'pomodoro';
+        break;
+
+      default:
+        console.error(`Unknown timer mode: ${mode}`);
+    }
+  }
+
   setTimerMode(mode, value) {
-    if (this.timerMode.hasOwnProperty(mode)) {
-      this.timerMode[mode] = value;
+    if (this.timer.hasOwnProperty(mode)) {
+      this.timer[mode] = value;
 
     if (mode === 'pomodoro') {
       let minutes = Math.floor(value)
@@ -65,7 +89,6 @@ export class Timer {
 
   startCountdown() {
     if (this.stateManager.state.isTimerRunning) return;
-    console.log(this.timerMode)
 
     clearInterval(this.countdownInterval);
 
@@ -76,11 +99,12 @@ export class Timer {
     this.startTime = this.currentTime;
     this.taskId = this.stateManager.state.selectedTaskId;
     this.projectId = this.stateManager.state.selectedProjectId;
+    this.switchTimer(this.timer.mode);
 
     this.logCurrentState("Start Button");
 
     const timeForCountdown =
-      this.remainingTime > 0 ? this.remainingTime : this.timerMode['pomodoro'] * 60 * 1000;
+      this.remainingTime > 0 ? this.remainingTime : this.currentTime;
     console.log(`timeForCountdown: ${timeForCountdown}`)
     this.countdown(timeForCountdown);
   }
@@ -135,17 +159,22 @@ export class Timer {
   
         this.remainingTime = remainingTime;
       }
-    }, 1000);
+    }, 100);
   }
 
 
 
   updateCountdown(pTime) {
     if (pTime <= 0) {
-      // if (this.sessions === this.untilLongRest) {
-      //   switchMode('longBreak')
-      // }
-      // this.sessions++;
+      // When the time runs out, switch the mode based on the current one
+      if (this.timer.mode === 'pomodoro') {
+        this.timer.session++; // Increase session count after each pomodoro
+        this.switchTimer('pomodoro');
+      } else if (this.timer.mode === 'shortRest') {
+        this.switchTimer('shortRest');
+      } else if (this.timer.mode === 'longRest') {
+        this.switchTimer('longRest');
+      }
 
       this.timerElement.innerText = "00:00";
       this.timerBox.style.backgroundColor = "#531625";
@@ -153,7 +182,8 @@ export class Timer {
       document.querySelector('.title-timer').innerText = 'Rest';
       this.timerBox.style.backgroundColor = "#2b405e";
       this.stateManager.state.isTimerRunning = false;
-      this.updateCountdown(this.shortRestTime);
+      this.updateCountdown(this.currentTime);
+      this.startCountdown();
     } else {
       let minutes = Math.floor(pTime / 60 / 1000)
         .toString()
