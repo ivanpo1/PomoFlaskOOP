@@ -9,7 +9,7 @@ export class Timer {
       longRest: 30,
       session: 0,
       untilLongRest: 4,
-      mode: 'pomodoro',
+      mode: null,
     } 
 
     this.currentTime = this.timer['pomodoro'] * 60 * 1000;
@@ -46,13 +46,16 @@ export class Timer {
         if (this.timer.session >= this.timer.untilLongRest) {
           this.currentTime = this.timer.longRest * 60 * 1000; // Long Rest
           this.timer.mode = 'longRest';
+          document.querySelector('.title-timer').innerText = 'Long Rest';
           this.timer.session = 0; // Reset session count after long rest
         } else {
           this.currentTime = this.timer.shortRest * 60 * 1000; // Short Rest
           this.timer.mode = 'shortRest';
+          document.querySelector('.title-timer').innerText = 'Short Rest';
         }
         break;
 
+      case null:
       case 'shortRest':
       case 'longRest':
         // After rest, switch back to pomodoro
@@ -88,9 +91,9 @@ export class Timer {
   // }
 
   startCountdown() {
-    if (this.stateManager.state.isTimerRunning) return;
+    // if (this.stateManager.state.isTimerRunning) return;
 
-    clearInterval(this.countdownInterval);
+    // clearInterval(this.countdownInterval);
 
     // this.isTimerRunning = true;
     this.stateManager.state.isTimerRunning = true;
@@ -101,12 +104,12 @@ export class Timer {
     this.projectId = this.stateManager.state.selectedProjectId;
     this.switchTimer(this.timer.mode);
 
-    this.logCurrentState("Start Button");
+    // this.logCurrentState("Start Button");
 
-    const timeForCountdown =
-      this.remainingTime > 0 ? this.remainingTime : this.currentTime;
-    console.log(`timeForCountdown: ${timeForCountdown}`)
-    this.countdown(timeForCountdown);
+    // const timeForCountdown =
+    //   this.remainingTime > 0 ? this.remainingTime : this.currentTime;
+    // console.log(`timeForCountdown: ${timeForCountdown}`)
+    this.countdown(this.currentTime);
   }
 
   pauseCountdown() {
@@ -159,7 +162,7 @@ export class Timer {
   
         this.remainingTime = remainingTime;
       }
-    }, 100);
+    }, 1000);
   }
 
 
@@ -175,16 +178,24 @@ export class Timer {
       } else if (this.timer.mode === 'longRest') {
         this.switchTimer('longRest');
       }
-
+  
+      // Reset the timer display and prepare for the next countdown
       this.timerElement.innerText = "00:00";
       this.timerBox.style.backgroundColor = "#531625";
-      this.sendDataFlask(this.startTime);
+      // this.sendDataFlask(this.startTime); // Send data to Flask on completion
       document.querySelector('.title-timer').innerText = 'Rest';
       this.timerBox.style.backgroundColor = "#2b405e";
-      this.stateManager.state.isTimerRunning = false;
+  
+      // Clear the current interval
+      clearInterval(this.countdownInterval);
+  
+      // Update the countdown with the new current time (based on the mode)
       this.updateCountdown(this.currentTime);
-      this.startCountdown();
+  
+      // Automatically start the countdown for the next session
+      this.startCountdown(); // Automatically restart the countdown
     } else {
+      // Update the display with the remaining time
       let minutes = Math.floor(pTime / 60 / 1000)
         .toString()
         .padStart(2, "0");
@@ -192,14 +203,7 @@ export class Timer {
         .toString()
         .padStart(2, "0");
       this.timerElement.innerText = `${minutes}:${seconds}`;
-      // this.sliderMinutes.value = minutes;
     }
-  }
-
-  logCurrentState(action) {
-    console.log(
-      `${action}: projectId ${this.projectId} taskId: ${this.taskId} taskName: ${this} currentTime: ${this.currentTime} remainingTime: ${this.remainingTime}`, this
-    );
   }
 
   sendDataFlask(startTime) {
