@@ -8,18 +8,18 @@ export default class ProjectManager {
     async fetchProjectData(projectId) {
       try {
         const response = await fetch("/api/projects/" + projectId);
-        const data = await response.json();
+        const projectData = await response.json();
   
-        if (data.error) {
-          console.error("Error fetching project:", data.error);
+        if (projectData.error) {
+          console.error("Error fetching project:", projectData.error);
           return null;
         } else {
-          console.log("fetchProjectData, data:", data);
+          console.log("fetchProjectData, data:", projectData);
           // this.stateManager.setSelectedProjectId(projectId);
-          this.stateManager.setProjectData(projectId, data)
-          sessionStorage.setItem("projectData", JSON.stringify(data));
+          this.stateManager.setProjectData(projectId, projectData)
+          sessionStorage.setItem("projectData", JSON.stringify(projectData));
   
-          return data;
+          return projectData;
         }
       } catch (error) {
         console.error("Error fetching project data:", error);

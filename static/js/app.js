@@ -67,18 +67,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (event.target.classList.contains("btn-delete-project")) {
       // projectManager.deleteProject(event.target);
-      uiManager.projectToDelete = event.target;
+      stateManager.projectToDelete = event.target;
       uiManager.showDeleteModal("Project");
     }
   });
 
   const confirmDeleteBtn = document.getElementById("confirmDelete");
   confirmDeleteBtn.addEventListener("click", () => {
-    if (uiManager.projectToDelete) {
-      console.log("Delete confirmed", uiManager.projectToDelete);
-      projectManager.deleteProject(uiManager.projectToDelete);
+    if (stateManager.projectToDelete) {
+      console.log("Delete confirmed", stateManager.projectToDelete);
+      projectManager.deleteProject(stateManager.projectToDelete);
       uiManager.hideDeleteModal();
-      uiManager.projectToDelete = null;
+      stateManager.projectToDelete = null;
     }
 
     if (uiManager.taskToDelete) {

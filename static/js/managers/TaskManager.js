@@ -9,18 +9,18 @@ export default class TaskManager {
     async fetchTaskData(taskId) {
       try {
         const response = await fetch(`/api/tasks/${taskId}`)
-        const data = await response.json();
+        const taskData = await response.json();
       
-        if (data.error) {
-         console.error("Error fetching task:", data.error);
+        if (taskData.error) {
+         console.error("Error fetching task:", taskData.error);
          return null;
         } else {
-            console.log(`fetchTaskData successful, data:`, data);
-            sessionStorage.setItem("taskData", JSON.stringify(data));
+            console.log(`fetchTaskData successful, data:`, taskData);
+            sessionStorage.setItem("taskData", JSON.stringify(taskData));
             // this.stateManager.setSelectedTaskId(taskId);
             // this.uiManager.updateInfoBox('task', data);
             // this.uiManager.updateTitleTimer(data.name, '#0F4C75')
-            return data;
+            return taskData;
           }
         } catch (error) {
           console.error(`Error fetching Task data: `, error)
@@ -38,14 +38,14 @@ export default class TaskManager {
           }
         });
     
-        const data = await response.json();
+        const taskData = await response.json();
     
-        if (data.error) {
-          console.error("Error adding task: ", data.error);
+        if (taskData.error) {
+          console.error("Error adding task: ", taskData.error);
           return null;
         } else {
-          console.log("addTask successful, task:", data)
-          return data;
+          console.log("addTask successful, task:", taskData)
+          return taskData;
         }
       } catch (error) {
         console.error("Error adding task: ", error);
