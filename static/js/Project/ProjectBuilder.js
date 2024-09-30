@@ -1,3 +1,5 @@
+import Project from 'static/js/Project'
+
 class ProjectBuilder {
     constructor(name) {
       this.name = name;  // Mandatory field

@@ -5,6 +5,7 @@ export default class ProjectManager {
       this.uiManager = uiManager;
     }
   
+    
     async fetchProjectData(projectId) {
       try {
         const response = await fetch("/api/projects/" + projectId);
