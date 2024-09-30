@@ -90,7 +90,7 @@ export default class TaskManager {
     }
 
 
-    async checkTask(e) {
+    async checkTask(e) { // MOVE TO UIManager?
       const taskId = e.dataset.taskId;
       this.uiManager.toggleSpinner(taskId, true)
 
@@ -125,7 +125,7 @@ export default class TaskManager {
       }
     }
   
-    async uncheckTask(e) {
+    async uncheckTask(e) { // MOVE TO UIManager?
       // e.stopPropagation();
 
       const taskId = e.dataset.taskId;

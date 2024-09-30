@@ -2,12 +2,12 @@ import Project from './project.js'
 
 class ProjectBuilder {
     constructor(name) {
-      this.name = name;  // Mandatory field
+      this.name = name; 
     }
   
     setId(id) {
       this.id = id;
-      return this;  // Return this for chaining
+      return this; 
     }
   
     setTime(time) {

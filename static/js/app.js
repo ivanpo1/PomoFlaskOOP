@@ -113,7 +113,7 @@ addTaskForm.addEventListener("submit", async function (event) {
   }
 });
 
-async function databaseFetch() {
+async function databaseAllProjectsFetch() {
   const response = await fetch('/api/project_data'); // Match the Flask route
   const projectData = await response.json(); // Parse the response as JSON
   const projectList = projectData.map(data => 
@@ -129,7 +129,7 @@ async function databaseFetch() {
   projectList.forEach(project => projectManager.addProject(project));
 }
 
-databaseFetch();
+databaseAllProjectsFetch();
 
 console.log("here here", projectManager.getAllProjects())
 
