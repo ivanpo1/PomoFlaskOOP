@@ -3,7 +3,7 @@ import TaskManager from "./managers/TaskManager.js";
 import StateManager from "./managers/StateManager.js";
 import UIManager from "./managers/UIManager.js";
 import { Timer } from "./timer.js";
-import initializeEventListeners from "./managers/EventListenerManager.js";
+import ProjectBuilder from "./Project/ProjectBuilder.js";
 
 const stateManager = new StateManager();
 const uiManager = new UIManager(stateManager);
@@ -112,6 +112,27 @@ addTaskForm.addEventListener("submit", async function (event) {
     }, 10);
   }
 });
+
+async function databaseFetch() {
+  const response = await fetch('/api/project_data'); // Match the Flask route
+  const projectData = await response.json(); // Parse the response as JSON
+  console.log(projectData)
+  const projectList = projectData.map(data => 
+    new ProjectBuilder(data.name)
+      .setId(data.id)
+      .setTime(data.time)
+      .setPomodoros(data.pomodoros)
+      .setCreatedAt(data.created_at)
+      .setCompletedAt(data.completed_at)
+      .build()
+  );
+  
+  projectList.forEach(project => projectManager.addProject(project));
+}
+
+databaseFetch();
+
+console.log(projectManager.projects)
 
 // console.log(projectManager.fetchProjectData(sessionStorage.getItem("selectedProjectId")))
 

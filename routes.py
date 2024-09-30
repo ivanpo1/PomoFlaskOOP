@@ -291,13 +291,10 @@ def register_routes(app, db):
 
         return redirect("/")
     
-    @app.route('/project_data')
+    @app.route('/api/project_data')
     def get_project_data():
         projects = Project.query.all()
-        return jsonify([{
-        'project_name': project.name,
-        'amount_time': project.time / (1000 * 60 * 60) % 24,
-        } for project in projects])
+        return jsonify([project.to_dict() for project in projects])
     
     
     @app.route('/chart')

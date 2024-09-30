@@ -3,6 +3,19 @@ export default class ProjectManager {
     constructor(stateManager, uiManager) {
       this.stateManager = stateManager;
       this.uiManager = uiManager;
+      this.projects = [];
+    }
+
+    addProject(project) {
+      this.projects.push(project);
+    }
+  
+    removeProject(projectId) {
+      this.projects = this.projects.filter(project => project.id !== projectId);
+    }
+  
+    getAllProjects() {
+      return this.projects;
     }
   
     
