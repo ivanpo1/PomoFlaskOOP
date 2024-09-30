@@ -1,4 +1,4 @@
-import Project from 'static/js/Project'
+import Project from './project.js'
 
 class ProjectBuilder {
     constructor(name) {

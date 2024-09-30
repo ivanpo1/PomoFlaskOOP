@@ -3,7 +3,7 @@ import TaskManager from "./managers/TaskManager.js";
 import StateManager from "./managers/StateManager.js";
 import UIManager from "./managers/UIManager.js";
 import { Timer } from "./timer.js";
-import ProjectBuilder from "./Project/ProjectBuilder.js";
+import ProjectBuilder from "./project/ProjectBuilder.js";
 
 const stateManager = new StateManager();
 const uiManager = new UIManager(stateManager);
@@ -116,7 +116,6 @@ addTaskForm.addEventListener("submit", async function (event) {
 async function databaseFetch() {
   const response = await fetch('/api/project_data'); // Match the Flask route
   const projectData = await response.json(); // Parse the response as JSON
-  console.log(projectData)
   const projectList = projectData.map(data => 
     new ProjectBuilder(data.name)
       .setId(data.id)
@@ -132,7 +131,7 @@ async function databaseFetch() {
 
 databaseFetch();
 
-console.log(projectManager.projects)
+console.log("here here", projectManager.getAllProjects())
 
 // console.log(projectManager.fetchProjectData(sessionStorage.getItem("selectedProjectId")))
 
