@@ -36,13 +36,17 @@ class Project(db.Model):
     user_id = db.Column(db.Integer, ForeignKey('users.id'))
 
     # Relationship with Tasks: One Project can have Many Tasks
-    tasks = db.relationship('Task', backref='project', lazy='dynamic')
+    tasks = db.relationship('Task', backref='project')
 
     def __repr__(self):
-        return f'Project: {self.name}'
+        return f'Project: {self.name} {[task.id for task in self.tasks]} {self.tasks}'
 
     def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        project_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+        project_dict['taskIds'] = [task.id for task in self.tasks]
+
+        return project_dict
 
 
 

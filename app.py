@@ -8,6 +8,7 @@ def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///testdb.db"
     app.config["SECRET_KEY"] = "chimichurri"
+    # app.config['SQLALCHEMY_ECHO'] = True
     db.init_app(app)
 
     # @app.after_request

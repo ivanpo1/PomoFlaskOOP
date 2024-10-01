@@ -116,6 +116,8 @@ addTaskForm.addEventListener("submit", async function (event) {
 async function databaseAllProjectsFetch() {
   const response = await fetch('/api/project_data'); // Match the Flask route
   const projectData = await response.json(); // Parse the response as JSON
+  console.log(`projectData`, projectData)
+
   const projectList = projectData.map(data => 
     new ProjectBuilder(data.name)
       .setId(data.id)
@@ -123,6 +125,7 @@ async function databaseAllProjectsFetch() {
       .setPomodoros(data.pomodoros)
       .setCreatedAt(data.created_at)
       .setCompletedAt(data.completed_at)
+      .setTaskId(data.taskIds)
       .build()
   );
   

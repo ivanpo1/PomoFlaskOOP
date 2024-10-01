@@ -4,6 +4,8 @@ import json
 from models import User, Project, Task
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
+
 
 
 def register_routes(app, db):
@@ -293,7 +295,9 @@ def register_routes(app, db):
     
     @app.route('/api/project_data')
     def get_project_data():
-        projects = Project.query.all()
+        # projects = Project.query.all()
+        projects = Project.query.options(joinedload(Project.tasks)).all()
+        print(projects)
         return jsonify([project.to_dict() for project in projects])
     
     

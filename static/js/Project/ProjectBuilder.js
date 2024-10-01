@@ -35,8 +35,8 @@ class ProjectBuilder {
       return this;
     }
   
-    setTasks(tasks) {
-      this.tasks = tasks;
+    setTaskId(taskId) {
+      this.taskIds = taskId;
       return this;
     }
   
