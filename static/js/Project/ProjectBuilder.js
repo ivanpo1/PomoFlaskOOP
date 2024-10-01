@@ -41,7 +41,7 @@ class ProjectBuilder {
   }
 
   build() {
-    return new Project(this); // Pass the builder object to the Project constructor
+    return new Project(this); 
   }
 }
 

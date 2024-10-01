@@ -4,6 +4,7 @@ import StateManager from "./managers/StateManager.js";
 import UIManager from "./managers/UIManager.js";
 import { Timer } from "./timer.js";
 import ProjectBuilder from "./project/ProjectBuilder.js";
+import TaskBuilder from "./task/TaskBuilder.js";
 
 const stateManager = new StateManager();
 const uiManager = new UIManager(stateManager);
@@ -134,7 +135,32 @@ async function databaseAllProjectsFetch() {
 
 databaseAllProjectsFetch();
 
-console.log("here here", projectManager.getAllProjects())
+console.log("Project List: ", projectManager.getAllProjects())
+
+async function databaseAllTasksFetch() {
+  const response = await fetch('/api/task_data'); 
+  const taskData = await response.json(); 
+
+  const taskList = taskData.map(data => 
+    new TaskBuilder(data.name)
+      .setId(data.id)
+      .setTime(data.time)
+      .setComplete(data.complete)
+      .setPomodoros(data.pomodoros)
+      .setCreatedAt(data.created_at)
+      .setCompletedAt(data.completed_at)
+      .setProjectId(data.project_id)
+      .build()
+  );
+  
+  taskList.forEach(task => {
+    taskManager.addTasks(task);
+  });
+}
+
+databaseAllTasksFetch();
+
+console.log("Task list", taskManager.getAllTasks())
 
 // console.log(projectManager.fetchProjectData(sessionStorage.getItem("selectedProjectId")))
 

@@ -3,8 +3,16 @@ export default class TaskManager {
       this.stateManager = stateManager;
       this.uiManager = uiManager;
       this.projectManager = projectManager;
+      this.tasks = [];
     }
   
+    addTasks(task) {
+      this.tasks.push(task);
+    }
+
+    getAllTasks() {
+      return this.tasks;
+    }
 
     async fetchTaskData(taskId) {
       try {

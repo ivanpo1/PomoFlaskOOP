@@ -1,4 +1,4 @@
-import Task from "./TaskBuilder.js";
+import Task from "./task.js";
 
 class TaskBuilder {
   constructor(name) {
@@ -20,6 +20,11 @@ class TaskBuilder {
     return this;
   }
 
+  setProjectId(projectId) {
+    this.projectId = projectId
+    return this;
+  }
+
   setPomodoros(pomodoros) {
     this.pomodoros = pomodoros;
     return this;
@@ -36,7 +41,7 @@ class TaskBuilder {
   }
 
   build() {
-    return new Task(this); // Pass the builder object to the Project constructor
+    return new Task(this); 
   }
 }
 
