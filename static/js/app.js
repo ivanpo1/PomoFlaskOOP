@@ -101,7 +101,7 @@ addTaskForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
   let taskName = addTaskForm.elements["name_task"].value;
-  const task = await taskManager.addTask(taskName);
+  const task = await taskManager.addTaskToDatabase(taskName);
   addTaskForm.reset();
   if (task) {
     const taskItem = uiManager.createTaskItem(task, false);

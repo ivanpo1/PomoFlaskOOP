@@ -9,6 +9,31 @@ class Task {
     this.completed_at = builder.completed_at;
     this.projectId = builder.projectId;
   }
+
+    setName(name) {
+      this.name = name;
+    }
+  
+    setTime(time) {
+      this.time = time;
+    }
+  
+    setComplete(complete) {
+      this.complete = complete;
+    }
+  
+    setPomodoros(pomodoros) {
+      this.pomodoros = pomodoros;
+    }
+  
+    setProjectId(projectId) {
+      this.projectId = projectId;
+    }
+  
+    markComplete() {
+      this.complete = true;
+      this.completed_at = new Date(); 
+    }
 }
 
 export default Task;

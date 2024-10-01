@@ -36,7 +36,7 @@ export default class TaskManager {
         };
     }
 
-    async addTask(taskName) {
+    async addTaskToDatabase(taskName) {
       try {
         const encodedTaskName = encodeURIComponent(taskName);
         const response = await fetch(`/add_task/${encodedTaskName}/${this.stateManager.state.selectedProjectId}`, {
