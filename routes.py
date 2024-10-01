@@ -297,8 +297,12 @@ def register_routes(app, db):
     def get_project_data():
         # projects = Project.query.all()
         projects = Project.query.options(joinedload(Project.tasks)).all()
-        print(projects)
         return jsonify([project.to_dict() for project in projects])
+    
+    @app.route('/api/task_data')
+    def get_task_data():
+        tasks = Task.query.all()
+        return jsonify([task.to_dict() for task in tasks])
     
     
     @app.route('/chart')
