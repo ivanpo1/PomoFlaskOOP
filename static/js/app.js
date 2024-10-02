@@ -3,7 +3,7 @@ import TaskManager from "./managers/TaskManager.js";
 import StateManager from "./managers/StateManager.js";
 import UIManager from "./managers/UIManager.js";
 import { Timer } from "./timer.js";
-import ProjectBuilder from "./project/ProjectBuilder.js";
+import ProjectBuilder from "./Project/ProjectBuilder.js";
 import TaskBuilder from "./task/TaskBuilder.js";
 
 const stateManager = new StateManager();

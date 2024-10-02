@@ -5,6 +5,7 @@ from models import User, Project, Task
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
+from datetime import datetime
 
 
 
@@ -80,7 +81,10 @@ def register_routes(app, db):
             task.time = data.get('time', task.time)
             task.complete = data.get('complete', task.complete)
             task.pomodoros = data.get('pomodoros', task.pomodoros)
-            task.completed_at = data.get('completed_at', task.completed_at)
+            # task.completed_at = data.get('completed_at', task.completed_at)
+            json_datetime_str = data.get('completed_at', task.completed_at)
+            python_datetime = datetime.fromisoformat(json_datetime_str)
+            task.completed_at = python_datetime
             
             # Commit the changes to the database
             db.session.commit()

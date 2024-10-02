@@ -1,6 +1,6 @@
 
 
-export default class TaskManager {
+class TaskManager {
     constructor(stateManager, uiManager, projectManager) {
       this.stateManager = stateManager;
       this.uiManager = uiManager;
@@ -10,7 +10,15 @@ export default class TaskManager {
   
     addTasks(task) {
       task.addObserver(this);
-      this.tasks.push(task);
+      this.tasks.push(task);    
+    }
+
+    getTaskById(taskId) {
+      console.log('taskId', taskId)
+      console.log('this.tasks', this.tasks)
+      const task = this.tasks.find(task => task.id === Number(taskId))
+      console.log(task)
+      return task
     }
 
     // deleteTask(taskId) {
@@ -148,22 +156,36 @@ export default class TaskManager {
     }
 
 
+    // async checkTask(e) { 
+    //   const taskId = e.dataset.taskId;
+    //   this.uiManager.toggleSpinner(taskId, true)
+
+    //   try {
+    //     console.log('event', e)
+    //     const projectId = e.dataset.projectId;
+    //     console.log(`Check Task ID: ${taskId} Check Project ID: ${projectId}`);
+    
+    //     await this.completeTask(taskId, projectId);
+
+    //   } catch (error) {
+    //     console.error("Failed to complete task:", error)
+    //   } finally {
+    //     this.uiManager.toggleSpinner(taskId, false)
+    //   }
+    // }
+
     async checkTask(e) { 
       const taskId = e.dataset.taskId;
-      this.uiManager.toggleSpinner(taskId, true)
-
-      try {
-        console.log('event', e)
-        const projectId = e.dataset.projectId;
-        console.log(`Check Task ID: ${taskId} Check Project ID: ${projectId}`);
-    
-        await this.completeTask(taskId, projectId);
-
-      } catch (error) {
-        console.error("Failed to complete task:", error)
-      } finally {
-        this.uiManager.toggleSpinner(taskId, false)
-      }
+      const task = this.getTaskById(taskId); // Assuming you have a method to get the task
+      
+      // Show spinner before starting the async operation
+      this.uiManager.toggleSpinner(taskId, true);
+      
+      // Update the task completion status, this triggers observer notification (which includes sync to DB)
+      task.setComplete(true);
+      
+      // Hide the spinner after the task update completes (sync happens within the observer pattern)
+      this.uiManager.toggleSpinner(taskId, false);
     }
   
     async completeTask(taskId, projectId) {
@@ -234,3 +256,5 @@ export default class TaskManager {
       }
     }
   }
+
+export default TaskManager;
