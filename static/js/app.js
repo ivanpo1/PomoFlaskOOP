@@ -48,12 +48,8 @@ document.addEventListener("DOMContentLoaded", () => {
       uiManager.showCompletedTask(event.target);
     }
 
-    // if (event.target.classList.contains("btn-delete")) {
-    //   taskManager.deleteTask(event.target);
-    // }
-
     if (event.target.classList.contains("btn-delete-task")) {
-      uiManager.taskToDelete = event.target;
+      stateManager.taskToDelete = event.target;
       uiManager.showDeleteModal("Task");
       // taskManager.deleteTask(event.target);
     }
@@ -82,11 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
       stateManager.projectToDelete = null;
     }
 
-    if (uiManager.taskToDelete) {
-      console.log("Delete confirmed", uiManager.taskToDelete);
-      taskManager.deleteTask(uiManager.taskToDelete);
+    if (stateManager.taskToDelete) {
+      console.log("Delete confirmed", stateManager.taskToDelete);
+      taskManager.deleteTask(stateManager.taskToDelete);
       uiManager.hideDeleteModal();
-      uiManager.taskToDelete = null;
+      stateManager.taskToDelete = null;
     }
   });
 

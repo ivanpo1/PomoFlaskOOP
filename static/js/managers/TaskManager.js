@@ -1,3 +1,5 @@
+
+
 export default class TaskManager {
     constructor(stateManager, uiManager, projectManager) {
       this.stateManager = stateManager;
@@ -7,8 +9,56 @@ export default class TaskManager {
     }
   
     addTasks(task) {
+      task.addObserver(this);
       this.tasks.push(task);
     }
+
+    // deleteTask(taskId) {
+    //   this.tasks = this.tasks.filter(task => task.id !== taskId);
+    //   this.syncDeleteToDatabase(taskId);
+    // }
+
+    update(task) {
+      this.syncToDatabase(task);
+    }
+
+    async syncToDatabase(task) {
+      const updatedFields = {
+        name: task.name,
+        time: task.time,
+        complete: task.complete,
+        pomodoros: task.pomodoros,
+        completed_at: task.completed_at,
+        projectId: task.projectId,
+      };
+  
+      try {
+        const response = await fetch(`api/task/${task.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFields),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to update task in the database.");
+        } else {
+          console.log("Task updated successfully in the database.");
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    // async syncDeleteToDatabase(taskId) {
+    //   // Send request to backend to delete task from database
+    //   fetch(`/api/delete_task/${taskId}`, { method: 'DELETE' })
+    //     .then(response => response.json())
+    //     .then(data => console.log(`Task ${taskId} deleted from database.`))
+    //     .catch(error => console.error('Error deleting task:', error));
+    // }
+
 
     getAllTasks() {
       return this.tasks;
@@ -98,7 +148,7 @@ export default class TaskManager {
     }
 
 
-    async checkTask(e) { // MOVE TO UIManager?
+    async checkTask(e) { 
       const taskId = e.dataset.taskId;
       this.uiManager.toggleSpinner(taskId, true)
 

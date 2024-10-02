@@ -67,6 +67,27 @@ def register_routes(app, db):
             # probamos = request.form.get('project_selection')
             return render_template("timer.html", projects=projects, tasks=tasks, project_exists=False)
 
+    @app.route('/api/task/<int:task_id>', methods=['PUT'])
+    def update_task(task_id):
+        # Get the JSON data from the request
+        data = request.json  
+        
+        # Retrieve the task by its ID
+        task = Task.query.get(task_id)
+        
+        if task:
+            task.name = data.get('name', task.name)  # Use current value if not provided
+            task.time = data.get('time', task.time)
+            task.complete = data.get('complete', task.complete)
+            task.pomodoros = data.get('pomodoros', task.pomodoros)
+            task.completed_at = data.get('completed_at', task.completed_at)
+            
+            # Commit the changes to the database
+            db.session.commit()
+            
+            return jsonify({"message": "Task updated successfully."}), 200
+        else:
+            return jsonify({"error": "Task not found."}), 404
 
     @login_required
     @app.route("/add_task/<task_name>/<project_id>", methods=['POST'])

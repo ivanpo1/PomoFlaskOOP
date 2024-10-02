@@ -8,32 +8,49 @@ class Task {
     this.created_at = builder.created_at;
     this.completed_at = builder.completed_at;
     this.projectId = builder.projectId;
+
+    this.observers = [];
   }
+
+    addObserver(observer) {
+      this.observers.push(observer);
+    }
+
+    notifyObservers() {
+      this.observers.forEach((observer) => observer.update(this))
+    }
 
     setName(name) {
       this.name = name;
+      this.notifyObservers();
     }
   
     setTime(time) {
       this.time = time;
+      this.notifyObservers();
     }
   
     setComplete(complete) {
       this.complete = complete;
+      this.completed_at = complete ? new Date() : null;
+      this.notifyObservers();
     }
   
     setPomodoros(pomodoros) {
       this.pomodoros = pomodoros;
+      this.notifyObservers();
     }
   
     setProjectId(projectId) {
       this.projectId = projectId;
+      this.notifyObservers();
     }
   
     markComplete() {
-      this.complete = true;
-      this.completed_at = new Date(); 
+      this.setComplete(true)
     }
+
+
 }
 
 export default Task;
