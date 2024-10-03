@@ -2,7 +2,7 @@ import initializeEventListeners from "./EventListenerManager.js";
 
 export default class UIManager {
   constructor(stateManager) {
-    this.isEventListenersInitialized = false; // Flag to track initialization
+    this.isEventListenersInitialized = false; 
     this.stateManager = stateManager;
     this.taskDiv = document.querySelector(".show-task-div");
     this.showTaskDiv = document.querySelector(".show-tasks");
@@ -199,7 +199,7 @@ export default class UIManager {
     // console.log(completeTaskList)
     tasks.forEach((task) => {
       if (!task.complete) {
-        const taskItem = this.createTaskItem(task);
+        const taskItem = this.createTaskElement(task);
         incompleteTaskList.appendChild(taskItem);
       }
     });
@@ -221,7 +221,7 @@ export default class UIManager {
 
       tasks.forEach((task) => {
         if (task.complete) {
-          const taskItem = this.createTaskItem(task, true);
+          const taskItem = this.createTaskElement(task);
           taskList.appendChild(taskItem);
         }
       });
@@ -233,37 +233,124 @@ export default class UIManager {
     }
   }
 
-  createTaskItem(task, isCompleted = false) {
+  // createTaskItem(task, isCompleted = false) {
+  //   const taskItem = document.createElement("li");
+  //   taskItem.innerHTML = `
+  //         <div class="task-wrapper task-w-${task.id}">
+  //             <button class="btn btn-tasks${
+  //               isCompleted ? " task-completed" : ""
+  //             }" data-task-id="${task.id}" data-project-id="${task.project_id}">
+  //                 ${task.name}
+  //                 <div class="spinner-border spinner-border-sm" id="loading-spinner-${task.id}" style="display:none;" role="status">
+  //                   <span class="visually-hidden"></span>
+  //                 </div>
+  //                 <div class="align-right-checkbox-wrapper">
+  //                     <input type="checkbox" data-task-id="${
+  //                       task.id
+  //                     }" data-project-id="${task.project_id}" value="${
+  //     isCompleted ? "complete_checkbox" : "incomplete_checkbox"
+  //   }" class="align-right-checkbox form-check-input ${
+  //     isCompleted ? "uncheck-task" : "check-task"
+  //   }" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="${
+  //     isCompleted ? "Unmark to restore" : "Mark to complete"
+  //   }" ${isCompleted ? "checked" : ""}/>
+  //                 </div>
+  //             </button>
+  //             <div class="task-time-dinamic">${this.timeToString(
+  //               task.time
+  //             )}</div>
+  //             <button class="btn-delete-task" data-task-id="${task.id}" data-project-id="${task.project_id}"> X </button>
+  //         </div>
+  //     `;
+  //   return taskItem;
+  // }
+
+  createTaskElement(task) {
     const taskItem = document.createElement("li");
-    taskItem.innerHTML = `
-          <div class="task-wrapper">
-              <button class="btn btn-tasks${
-                isCompleted ? " task-completed" : ""
-              }" data-task-id="${task.id}" data-project-id="${task.project_id}">
-                  ${task.name}
-                  <div class="spinner-border spinner-border-sm" id="loading-spinner-${task.id}" style="display:none;" role="status">
-                    <span class="visually-hidden"></span>
-                  </div>
-                  <div class="align-right-checkbox-wrapper">
-                      <input type="checkbox" data-task-id="${
-                        task.id
-                      }" data-project-id="${task.project_id}" value="${
-      isCompleted ? "complete_checkbox" : "incomplete_checkbox"
-    }" class="align-right-checkbox form-check-input ${
-      isCompleted ? "uncheck-task" : "check-task"
-    }" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="${
-      isCompleted ? "Unmark to restore" : "Mark to complete"
-    }" ${isCompleted ? "checked" : ""}/>
-                  </div>
-              </button>
-              <div class="task-time-dinamic">${this.timeToString(
-                task.time
-              )}</div>
-              <button class="btn-delete-task" data-task-id="${task.id}" data-project-id="${task.project_id}"> X </button>
-          </div>
-      `;
+    const taskWrapper = this.createTaskWrapper(task);
+    const spinner = this.createSpinner(task);
+    const checkbox = this.createCheckbox(task);
+    const timeDisplay = this.createTimeDisplay(task);
+    const deleteButton = this.createDeleteButton(task);
+
+    taskWrapper.appendChild(spinner);
+    taskWrapper.appendChild(checkbox);
+    taskWrapper.appendChild(timeDisplay);
+    taskWrapper.appendChild(deleteButton);
+    taskItem.appendChild(taskWrapper);
+
     return taskItem;
   }
+
+  createTaskWrapper(task) {
+    const taskWrapper = document.createElement("div");
+    taskWrapper.className = `task-wrapper task-w-${task.id}`;
+
+    const taskButton = document.createElement("button");
+    // taskButton.className = `btn btn-tasks${task.complete ? " task-completed" : ""}`;
+    taskButton.className = `btn btn-tasks`;
+    taskButton.dataset.taskId = task.id;
+    taskButton.dataset.projectId = task.projectId;
+    taskButton.textContent = task.name;
+
+    taskWrapper.appendChild(taskButton);
+    return taskWrapper;
+  }
+
+  createSpinner(task) {
+    const spinner = document.createElement("div");
+    spinner.className = "spinner-border spinner-border-sm";
+    spinner.id = `loading-spinner-${task.id}`;
+    spinner.style.display = "none";
+    spinner.setAttribute("role", "status");
+
+    const spinnerText = document.createElement("span");
+    spinnerText.className = "visually-hidden";
+
+    spinner.appendChild(spinnerText);
+    return spinner;
+  }
+
+  createCheckbox(task) {
+    const checkboxWrapper = document.createElement("div");
+    checkboxWrapper.className = "align-right-checkbox-wrapper";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.dataset.taskId = task.id;
+    checkbox.dataset.projectId = task.projectId;
+    checkbox.className = `align-right-checkbox form-check-input ${
+      task.complete ? "uncheck-task" : "check-task"
+    }`;
+    checkbox.value = task.complete ? "complete_checkbox" : "incomplete_checkbox";
+    checkbox.setAttribute("data-bs-toggle", "tooltip");
+    checkbox.setAttribute("data-bs-placement", "right");
+    checkbox.setAttribute(
+      "data-bs-title",
+      task.complete ? "Unmark to restore" : "Mark to complete"
+    );
+    // checkbox.checked = task.complete;
+
+    checkboxWrapper.appendChild(checkbox);
+    return checkboxWrapper;
+  }
+
+  createTimeDisplay(task) {
+    const timeDisplay = document.createElement("div");
+    timeDisplay.className = "task-time-dinamic";
+    timeDisplay.textContent = this.timeToString(task.time);
+    return timeDisplay;
+  }
+
+  createDeleteButton(task) {
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "btn-delete-task";
+    deleteButton.dataset.taskId = task.id;
+    deleteButton.dataset.projectId = task.projectId;
+    deleteButton.textContent = "X";
+    return deleteButton;
+  }
+
 
   createShowCompletedButton() {
     const showCompletedButton = document.createElement("div");
@@ -313,7 +400,7 @@ export default class UIManager {
 
   toggleSpinner(taskId, show) {
     if (show) {
-      // Set a timeout to show the spinner after 1 second
+
       this.spinnerTimeouts[taskId] = setTimeout(() => {
         const spinner = document.getElementById(`loading-spinner-${taskId}`);
         if (spinner) {
@@ -323,11 +410,11 @@ export default class UIManager {
         const btnTask = spinner.closest('.btn-tasks');
         if (btnTask) {
           btnTask.style.transitionDuration = '2s'
-          btnTask.style.backgroundColor = '#0baf60'; // Example color
+          btnTask.style.backgroundColor = '#0baf60'; 
         }
       }, 400);
     } else {
-      // Clear the timeout if it exists
+      
       if (this.spinnerTimeouts[taskId]) {
         clearTimeout(this.spinnerTimeouts[taskId]);
         delete this.spinnerTimeouts[taskId];
@@ -341,21 +428,72 @@ export default class UIManager {
       const btnTask = spinner.closest('.btn-tasks');
       if (btnTask) {
         btnTask.style.transitionDuration = '';
-        btnTask.style.backgroundColor = ''; // Reset color
+        btnTask.style.backgroundColor = ''; 
       }
     }
   }
 
-    // Function to show the modal
+
   showDeleteModal(what) {
     document.querySelector(".modal-text").innerText = `Are you sure you want to delete this ${what}?`;
     deleteModal.style.display = 'flex'; // Show modal (flex centers it)
   }
 
-  // Function to hide the modal
+  
   hideDeleteModal() {
     deleteModal.style.display = 'none';
   }
 
+  moveTask(moveFrom, moveTo, taskElement) {
+    const fromContainer = document.getElementById(moveFrom) || document.querySelector(`.${moveFrom}`);
+    console.log("fromContainer ", fromContainer)
+    const toContainer = document.getElementById(moveTo) || document.querySelector(`.${moveTo}`);
+    console.log("toContainer ", toContainer)
+    // console.log('taskElement on moveTask', taskElement)
+   
+    if (fromContainer && toContainer) {
+      this.removeTask(fromContainer, taskElement);  
+      this.appearTask(toContainer, taskElement)    
+  
+      this.updateTaskAppearance(taskElement, moveTo);
+      // updateTaskAppearance(taskElement, moveTo);
+    } else {
+      console.error('Task element or containers not found, or task is not in the source container.');
+    }
+  }
+  
+  removeTask(container, taskElement) {
+    taskElement.classList.add('fade-out');
+    
+    taskElement.addEventListener('animationend', () => {
+      container.removeChild(taskElement);
+    });
+  }
+  
+  appearTask(container, taskElement) {
+    taskElement.classList.remove('fade-out');
+    taskElement.classList.add('fade-in');
+    
+    container.prepend(taskElement);
+
+    setTimeout(() => {
+      taskElement.classList.add("visible");
+      taskElement.classList.remove('fade-in')
+    }, 100);
+  }
+
+
+  updateTaskAppearance(taskElement, destination) {
+    if (destination === 'complete-task-div') {
+      taskElement.classList.remove('incomplete-task');
+      taskElement.classList.add('task-completed');
+    } else if (destination === 'incomplete-task-div') {
+      taskElement.classList.remove('task-completed');
+      taskElement.classList.add('incomplete-task');
+    } else if (destination === 'trashBin') {
+      taskElement.classList.add('trashed-task');
+    }
+    // Add more cases
+  }
 
 }

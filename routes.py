@@ -82,9 +82,9 @@ def register_routes(app, db):
             task.complete = data.get('complete', task.complete)
             task.pomodoros = data.get('pomodoros', task.pomodoros)
             # task.completed_at = data.get('completed_at', task.completed_at)
-            json_datetime_str = data.get('completed_at', task.completed_at)
-            python_datetime = datetime.fromisoformat(json_datetime_str)
-            task.completed_at = python_datetime
+            # json_datetime_str = data.get('completed_at', task.completed_at)
+            # python_datetime = datetime.fromisoformat(json_datetime_str)
+            # task.completed_at = python_datetime
             
             # Commit the changes to the database
             db.session.commit()

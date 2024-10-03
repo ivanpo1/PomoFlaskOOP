@@ -761,7 +761,6 @@ h4 {
 
 .task-completed {
   opacity: 0.6;
-  background-color: #0d3a8f;
   
 }
 
@@ -870,6 +869,11 @@ h4 {
 .fade-in {
   opacity: 0;
   transition: opacity 0.5s ease-in;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 2s ease;
 }
 
 .fade-in.visible {

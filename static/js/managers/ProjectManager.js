@@ -60,7 +60,6 @@ export default class ProjectManager {
           this.stateManager.state.previousClickedButton
         );
     
-        // Update state
         this.stateManager.setSelectedProjectId(projectId);
         this.stateManager.state.previousClickedButton = button;
     

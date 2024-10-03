@@ -100,7 +100,7 @@ addTaskForm.addEventListener("submit", async function (event) {
   const task = await taskManager.addTaskToDatabase(taskName);
   addTaskForm.reset();
   if (task) {
-    const taskItem = uiManager.createTaskItem(task, false);
+    const taskItem = uiManager.createTaskElement(task, false);
     taskItem.classList.add("fade-in");
     document.querySelector(".ul-task-list-incomplete").prepend(taskItem);
 
@@ -111,8 +111,8 @@ addTaskForm.addEventListener("submit", async function (event) {
 });
 
 async function databaseAllProjectsFetch() {
-  const response = await fetch('/api/project_data'); // Match the Flask route
-  const projectData = await response.json(); // Parse the response as JSON
+  const response = await fetch('/api/project_data'); 
+  const projectData = await response.json(); 
   console.log(`projectData`, projectData)
 
   const projectList = projectData.map(data => 
@@ -131,7 +131,7 @@ async function databaseAllProjectsFetch() {
 
 databaseAllProjectsFetch();
 
-console.log("Project List: ", projectManager.getAllProjects())
+// console.log("Project List: ", projectManager.getAllProjects())
 
 async function databaseAllTasksFetch() {
   const response = await fetch('/api/task_data'); 

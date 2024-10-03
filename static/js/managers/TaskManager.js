@@ -14,8 +14,6 @@ class TaskManager {
     }
 
     getTaskById(taskId) {
-      console.log('taskId', taskId)
-      console.log('this.tasks', this.tasks)
       const task = this.tasks.find(task => task.id === Number(taskId))
       console.log(task)
       return task
@@ -98,7 +96,7 @@ class TaskManager {
       try {
         const encodedTaskName = encodeURIComponent(taskName);
         const response = await fetch(`/add_task/${encodedTaskName}/${this.stateManager.state.selectedProjectId}`, {
-          method: 'POST', // Specify that you're using POST
+          method: 'POST', 
           headers: {
             'Content-Type': 'application/json', // This ensures JSON data is expected
           }
@@ -125,20 +123,17 @@ class TaskManager {
       try {
           const taskId = button.getAttribute("data-task-id");
           const projectId = button.getAttribute("data-project-id");
-  
-          // Update button styles based on task
+   
           this.uiManager.updateButtonStyles(
               "task",
               button,
               this.stateManager.state.previousClickedButton
           );
   
-          // Update selected project and task IDs in the state manager
           this.stateManager.setSelectedProjectId(projectId);
           this.stateManager.setSelectedTaskId(taskId);
           this.stateManager.state.previousClickedButton = button;
   
-          // Fetch task data asynchronously
           const taskData = await this.fetchTaskData(taskId);
           
           if (taskData) {
@@ -175,16 +170,30 @@ class TaskManager {
     // }
 
     async checkTask(e) { 
+      console.log('checkTask: whats e?', e)
       const taskId = e.dataset.taskId;
-      const task = this.getTaskById(taskId); // Assuming you have a method to get the task
-      
-      // Show spinner before starting the async operation
+      const task = this.getTaskById(taskId); 
       this.uiManager.toggleSpinner(taskId, true);
       
-      // Update the task completion status, this triggers observer notification (which includes sync to DB)
-      task.setComplete(true);
       
-      // Hide the spinner after the task update completes (sync happens within the observer pattern)
+      task.setComplete(true);
+      const taskElement = document.querySelector(`.task-w-${taskId}`);
+      this.uiManager.moveTask("incomplete-task-div", "complete-task-div", taskElement)
+      
+      this.uiManager.toggleSpinner(taskId, false);
+    }
+
+    async uncheckTask(e) { 
+      console.log('checkTask: whats e?', e)
+      const taskId = e.dataset.taskId;
+      const task = this.getTaskById(taskId);
+    
+      this.uiManager.toggleSpinner(taskId, true);
+        
+      task.setComplete(false);
+      const taskElement = document.querySelector(`.task-w-${taskId}`);
+      this.uiManager.moveTask("complete-task-div", "incomplete-task-div", taskElement)
+      
       this.uiManager.toggleSpinner(taskId, false);
     }
   
@@ -205,22 +214,22 @@ class TaskManager {
       }
     }
   
-    async uncheckTask(e) { // MOVE TO UIManager?
-      // e.stopPropagation();
+    // async uncheckTask(e) { // MOVE TO UIManager?
+    //   // e.stopPropagation();
 
-      const taskId = e.dataset.taskId;
-      this.uiManager.toggleSpinner(taskId, true)
+    //   const taskId = e.dataset.taskId;
+    //   this.uiManager.toggleSpinner(taskId, true)
 
-      try {
-        const projectId = e.dataset.projectId;
+    //   try {
+    //     const projectId = e.dataset.projectId;
     
-        await this.uncompleteTask(taskId, projectId);
-      } catch (error) {
-        console.error("Failed to uncomplete task: ", error)
-      } finally {
-        this.uiManager.toggleSpinner(taskId, false)
-      }
-    };
+    //     await this.uncompleteTask(taskId, projectId);
+    //   } catch (error) {
+    //     console.error("Failed to uncomplete task: ", error)
+    //   } finally {
+    //     this.uiManager.toggleSpinner(taskId, false)
+    //   }
+    // };
   
     async uncompleteTask(taskId, projectId) {
       try {
