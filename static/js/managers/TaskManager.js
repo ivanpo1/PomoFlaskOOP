@@ -15,7 +15,7 @@ class TaskManager {
 
     getTaskById(taskId) {
       const task = this.tasks.find(task => task.id === Number(taskId))
-      console.log(task)
+      // console.log(task)
       return task
     }
 
@@ -79,7 +79,7 @@ class TaskManager {
          console.error("Error fetching task:", taskData.error);
          return null;
         } else {
-            console.log(`fetchTaskData successful, data:`, taskData);
+            // console.log(`fetchTaskData successful, data:`, taskData);
             sessionStorage.setItem("taskData", JSON.stringify(taskData));
             // this.stateManager.setSelectedTaskId(taskId);
             // this.uiManager.updateInfoBox('task', data);
@@ -170,38 +170,38 @@ class TaskManager {
     // }
 
     async checkTask(e) { 
-      console.log('checkTask: whats e?', e)
+      // console.log('checkTask: whats e?', e)
       const taskId = e.dataset.taskId;
       const task = this.getTaskById(taskId); 
-      this.uiManager.toggleSpinner(taskId, true);
+      // this.uiManager.toggleSpinner(taskId, true);
       
       
       task.setComplete(true);
       const taskElement = document.querySelector(`.task-w-${taskId}`);
       this.uiManager.moveTask("incomplete-task-div", "complete-task-div", taskElement)
       
-      this.uiManager.toggleSpinner(taskId, false);
+      // this.uiManager.toggleSpinner(taskId, false);
     }
 
     async uncheckTask(e) { 
-      console.log('checkTask: whats e?', e)
+      // console.log('uncheckTask: whats e?', e)
       const taskId = e.dataset.taskId;
-      const task = this.getTaskById(taskId);
+      const task = this.getTaskById(taskId);    
     
-      this.uiManager.toggleSpinner(taskId, true);
+      // this.uiManager.toggleSpinner(taskId, true);
         
       task.setComplete(false);
       const taskElement = document.querySelector(`.task-w-${taskId}`);
       this.uiManager.moveTask("complete-task-div", "incomplete-task-div", taskElement)
       
-      this.uiManager.toggleSpinner(taskId, false);
+      // this.uiManager.toggleSpinner(taskId, false);
     }
   
     async completeTask(taskId, projectId) {
       try { 
         const response = await fetch(`/complete/task/${taskId}`);
         const data = await response.json();
-        console.log(`ProjectID on complete task: ID: ${projectId}`)
+        // console.log(`ProjectID on complete task: ID: ${projectId}`)
   
         if (data.error) {
           console.error(`Error setting task as completed:`, data.error);

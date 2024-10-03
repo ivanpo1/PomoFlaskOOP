@@ -313,14 +313,16 @@ export default class UIManager {
 
   createCheckbox(task) {
     const checkboxWrapper = document.createElement("div");
-    checkboxWrapper.className = "align-right-checkbox-wrapper";
+    checkboxWrapper.className = "align-right checkbox-wrapper";
+    console.log('task.complete', task.complete)
+    console.log('task.complete?', task.complete ? 'yes' : 'no')
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.dataset.taskId = task.id;
     checkbox.dataset.projectId = task.projectId;
-    checkbox.className = `align-right-checkbox form-check-input ${
-      task.complete ? "uncheck-task" : "check-task"
+    checkbox.className = `align-right checkbox-task form-check-input ${
+      task.complete ? "unchecked-task" : "check-task"
     }`;
     checkbox.value = task.complete ? "complete_checkbox" : "incomplete_checkbox";
     checkbox.setAttribute("data-bs-toggle", "tooltip");
@@ -329,7 +331,7 @@ export default class UIManager {
       "data-bs-title",
       task.complete ? "Unmark to restore" : "Mark to complete"
     );
-    // checkbox.checked = task.complete;
+    checkbox.checked = task.complete;
 
     checkboxWrapper.appendChild(checkbox);
     return checkboxWrapper;
@@ -398,47 +400,46 @@ export default class UIManager {
   }
   
 
-  toggleSpinner(taskId, show) {
-    if (show) {
+  // toggleSpinner(taskId, show) {
+  //   if (show) {
 
-      this.spinnerTimeouts[taskId] = setTimeout(() => {
-        const spinner = document.getElementById(`loading-spinner-${taskId}`);
-        if (spinner) {
-          spinner.style.display = 'block';
-        }
+  //     this.spinnerTimeouts[taskId] = setTimeout(() => {
+  //       const spinner = document.getElementById(`loading-spinner-${taskId}`);
+  //       if (spinner) {
+  //         spinner.style.display = 'block';
+  //       }
 
-        const btnTask = spinner.closest('.btn-tasks');
-        if (btnTask) {
-          btnTask.style.transitionDuration = '2s'
-          btnTask.style.backgroundColor = '#0baf60'; 
-        }
-      }, 400);
-    } else {
+  //       const btnTask = spinner.closest('.btn-tasks');
+  //       if (btnTask) {
+  //         btnTask.style.transitionDuration = '2s'
+  //         btnTask.style.backgroundColor = '#0baf60'; 
+  //       }
+  //     }, 400);
+  //   } else {
       
-      if (this.spinnerTimeouts[taskId]) {
-        clearTimeout(this.spinnerTimeouts[taskId]);
-        delete this.spinnerTimeouts[taskId];
-      }
+  //     if (this.spinnerTimeouts[taskId]) {
+  //       clearTimeout(this.spinnerTimeouts[taskId]);
+  //       delete this.spinnerTimeouts[taskId];
+  //     }
 
-      const spinner = document.getElementById(`loading-spinner-${taskId}`);
-      if (spinner) {
-        spinner.style.display = 'none';
-      }
+  //     const spinner = document.getElementById(`loading-spinner-${taskId}`);
+  //     if (spinner) {
+  //       spinner.style.display = 'none';
+  //     }
 
-      const btnTask = spinner.closest('.btn-tasks');
-      if (btnTask) {
-        btnTask.style.transitionDuration = '';
-        btnTask.style.backgroundColor = ''; 
-      }
-    }
-  }
+  //     const btnTask = spinner.closest('.btn-tasks');
+  //     if (btnTask) {
+  //       btnTask.style.transitionDuration = '';
+  //       btnTask.style.backgroundColor = ''; 
+  //     }
+  //   }
+  // }
 
 
   showDeleteModal(what) {
     document.querySelector(".modal-text").innerText = `Are you sure you want to delete this ${what}?`;
-    deleteModal.style.display = 'flex'; // Show modal (flex centers it)
+    deleteModal.style.display = 'flex'; 
   }
-
   
   hideDeleteModal() {
     deleteModal.style.display = 'none';
@@ -446,54 +447,74 @@ export default class UIManager {
 
   moveTask(moveFrom, moveTo, taskElement) {
     const fromContainer = document.getElementById(moveFrom) || document.querySelector(`.${moveFrom}`);
-    console.log("fromContainer ", fromContainer)
     const toContainer = document.getElementById(moveTo) || document.querySelector(`.${moveTo}`);
-    console.log("toContainer ", toContainer)
-    // console.log('taskElement on moveTask', taskElement)
-   
-    if (fromContainer && toContainer) {
-      this.removeTask(fromContainer, taskElement);  
-      this.appearTask(toContainer, taskElement)    
+
+    console.log('moveTask', taskElement)
   
-      this.updateTaskAppearance(taskElement, moveTo);
-      // updateTaskAppearance(taskElement, moveTo);
+    if (fromContainer && toContainer && taskElement) {
+      if (fromContainer.contains(taskElement)) {
+        this.removeTask(fromContainer, taskElement); 
+        setTimeout(() => { this.appearTask(toContainer, taskElement); }, 150) 
+         
+        this.updateTaskAppearance(taskElement, moveTo);
+      } else {
+        console.error('Task element is not found in the source container.');
+      }
     } else {
       console.error('Task element or containers not found, or task is not in the source container.');
     }
   }
   
   removeTask(container, taskElement) {
-    taskElement.classList.add('fade-out');
-    
-    taskElement.addEventListener('animationend', () => {
-      container.removeChild(taskElement);
-    });
+    if (container.contains(taskElement)) {
+      taskElement.classList.add('fade-out');
+      
+      taskElement.addEventListener('animationend', () => {
+        if (container.contains(taskElement)) {
+          container.removeChild(taskElement);
+        }
+      });
+    } else {
+      console.error('Task element not found in the source container.');
+    }
   }
   
   appearTask(container, taskElement) {
     taskElement.classList.remove('fade-out');
     taskElement.classList.add('fade-in');
-    
-    container.prepend(taskElement);
-
-    setTimeout(() => {
-      taskElement.classList.add("visible");
-      taskElement.classList.remove('fade-in')
-    }, 100);
+  
+    // Double check if the task is already in the container before prepending
+    if (!container.contains(taskElement)) {
+      container.prepend(taskElement);
+  
+      setTimeout(() => {
+        taskElement.classList.add("visible");
+        taskElement.classList.remove('fade-in');
+      }, 100);
+    } else {
+      console.error('Task element is already in the destination container.');
+    }
   }
 
 
   updateTaskAppearance(taskElement, destination) {
-    if (destination === 'complete-task-div') {
-      taskElement.classList.remove('incomplete-task');
-      taskElement.classList.add('task-completed');
-    } else if (destination === 'incomplete-task-div') {
-      taskElement.classList.remove('task-completed');
-      taskElement.classList.add('incomplete-task');
-    } else if (destination === 'trashBin') {
-      taskElement.classList.add('trashed-task');
-    }
-    // Add more cases
+    const checkbox = taskElement.querySelector('.checkbox-task');
+    setTimeout(() => {  // Add a slight delay to allow the current event to finish
+      if (destination === 'complete-task-div') {
+        taskElement.classList.remove('incomplete-task');
+        taskElement.classList.add('task-completed');
+        checkbox.classList.remove('check-task');
+        checkbox.classList.add('unchecked-task');
+        checkbox.value = 'complete_checkbox';
+      } else if (destination === 'incomplete-task-div') {
+        taskElement.classList.remove('task-completed');
+        taskElement.classList.add('incomplete-task');
+        checkbox.classList.remove('unchecked-task');
+        checkbox.classList.add('check-task');
+        checkbox.value = 'incomplete_checkbox';
+      } else if (destination === 'trashBin') {
+        taskElement.classList.add('trashed-task');
+      }
+    }, 10);  // Delay for 10 milliseconds
   }
-
 }

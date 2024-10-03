@@ -28,7 +28,7 @@ export default class ProjectManager {
           console.error("Error fetching project:", projectData.error);
           return null;
         } else {
-          console.log("fetchProjectData, data:", projectData);
+          // console.log("fetchProjectData, data:", projectData);
           // this.stateManager.setSelectedProjectId(projectId);
           this.stateManager.setProjectData(projectId, projectData)
           sessionStorage.setItem("projectData", JSON.stringify(projectData));
@@ -49,7 +49,7 @@ export default class ProjectManager {
   
     async handleBtnProjectClick(button) {
 
-      console.log('handleBtnProjectClick pressed')
+      // console.log('handleBtnProjectClick pressed')
 
       try {   
         const projectId = button.getAttribute("data-project-id");
@@ -81,7 +81,7 @@ export default class ProjectManager {
 
       const projectId = e.dataset.projectId;
 
-      console.log(projectId)
+      // console.log(projectId)
       try {
         const response = await fetch(`/delete_project/${projectId}`, {
           method: "DELETE",

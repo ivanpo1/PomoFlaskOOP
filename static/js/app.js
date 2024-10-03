@@ -37,10 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (event.target.classList.contains("check-task")) {
+      console.log('eventListener: check-task')
       taskManager.checkTask(event.target);
     }
 
-    if (event.target.classList.contains("uncheck-task")) {
+    if (event.target.classList.contains("unchecked-task")) {
+      console.log('eventListener: unchecked-task')
       taskManager.uncheckTask(event.target);
     }
 
@@ -113,7 +115,7 @@ addTaskForm.addEventListener("submit", async function (event) {
 async function databaseAllProjectsFetch() {
   const response = await fetch('/api/project_data'); 
   const projectData = await response.json(); 
-  console.log(`projectData`, projectData)
+  // console.log(`projectData`, projectData)
 
   const projectList = projectData.map(data => 
     new ProjectBuilder(data.name)
@@ -156,7 +158,7 @@ async function databaseAllTasksFetch() {
 
 databaseAllTasksFetch();
 
-console.log("Task list", taskManager.getAllTasks())
+// console.log("Task list", taskManager.getAllTasks())
 
 // console.log(projectManager.fetchProjectData(sessionStorage.getItem("selectedProjectId")))
 
