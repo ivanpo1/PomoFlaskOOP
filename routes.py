@@ -91,34 +91,52 @@ def register_routes(app, db):
             return jsonify({"error": "Task not found."}), 404
 
     @login_required
-    @app.route("/add_task/<task_name>/<project_id>", methods=['POST'])
+    @app.route("/add_task/<task_name>/<project_id>", methods=["POST"])
     def add_task(task_name, project_id):
-        if request.method == 'POST':
-            # Check if task_name is empty
+        if request.method == "POST":
+            # Validate inputs
             if not task_name:
-                return jsonify({'error': 'Adding Task Failed: Task name is required'}), 400
+                return (
+                    jsonify(
+                        {
+                            "success": "false",
+                            "error": "Adding Task Failed: Task name is required",
+                        }
+                    ),
+                    400,
+                )
+            if not project_id.isdigit():  # Check if project_id is a number
+                return (
+                    jsonify({"success": "false", "error": "Invalid project ID"}),
+                    400,
+                )
 
             # Find the project by project_id
             current_project = Project.query.filter_by(id=project_id).first()
 
             # Check if the project exists
             if not current_project:
-                return jsonify({'error': 'Project not found'}), 404
+                return (
+                    jsonify({"success": "false", "error": "Project not found"}),
+                    404,
+                )
 
             # Create new task
             task = Task(name=task_name, project_id=current_project.id, complete=False)
 
-            db.session.add(task)
-            db.session.commit()
-
-            task = task.to_dict()  # Convert task to dictionary
-
-            if task:
-                # Successfully created the task
-                return jsonify(task), 201
-            else:
-                # Something went wrong when converting or committing
-                return jsonify({'error': 'Adding Task Failed'}), 500
+            try:
+                db.session.add(task)
+                db.session.commit()
+                task = task.to_dict()  # Convert task to dictionary
+                return jsonify(task), 201  # Successfully created the task
+            except Exception as e:
+                db.session.rollback()  # Roll back in case of error
+                return (
+                    jsonify(
+                        {"success": "false", "error": "Adding Task Failed: " + str(e)}
+                    ),
+                    500,
+                )
 
     @login_required
     @app.route("/delete_task/<task_id>", methods=["DELETE"])
@@ -131,8 +149,10 @@ def register_routes(app, db):
             db.session.commit()
 
             success_message = jsonify(
-                {"success": True, 
-                 "message": f"Task {task_id} deleted successfully"}
+                {
+                 "success": True, 
+                 "message": f"Task {task_id} deleted successfully"
+                }
             )
             return success_message
         except Exception as e:

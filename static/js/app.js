@@ -102,7 +102,7 @@ addTaskForm.addEventListener("submit", async function (event) {
   const task = await taskManager.addTaskToDatabase(taskName);
   addTaskForm.reset();
   if (task) {
-    const taskItem = uiManager.createTaskElement(task, false);
+    const taskItem = uiManager.createTaskElement(task);
     taskItem.classList.add("fade-in");
     document.querySelector(".ul-task-list-incomplete").prepend(taskItem);
 

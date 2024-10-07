@@ -97,21 +97,20 @@ class TaskManager {
       try {
         const encodedTaskName = encodeURIComponent(taskName);
         const response = await fetch(`/add_task/${encodedTaskName}/${this.stateManager.state.selectedProjectId}`, {
-          method: 'POST', 
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json', // This ensures JSON data is expected
-          }
+          },
         });
     
         const taskData = await response.json();
     
-        if (taskData.error) {
-          console.error("Error adding task: ", taskData.error);
-          return null;
-        } else {
-          console.log("addTask successful, task:", taskData)
-          return taskData;
+        if (!response.ok) { // Check if the response status is OK
+          throw new Error(taskData.error || "Failed to add task");
         }
+    
+        console.log("addTask successful, task:", taskData);
+        return taskData;
       } catch (error) {
         console.error("Error adding task: ", error);
         return null;
