@@ -114,49 +114,72 @@ addTaskForm.addEventListener("submit", async function (event) {
 
 async function databaseAllProjectsFetch() {
   const response = await fetch('/api/project_data'); 
-  const projectData = await response.json(); 
-  // console.log(`projectData`, projectData)
+  const projectData = await response.json();
 
-  const projectList = projectData.map(data => 
-    new ProjectBuilder(data.name)
+  const taskList = [];
+
+  const projectList = projectData.map(data => {
+    // Map task data to Task objects using TaskBuilder and collect in taskList
+    const tasks = data.tasks.map(taskData => {
+      const task = new TaskBuilder(taskData.name)
+        .setId(taskData.id)
+        .setTime(taskData.time)
+        .setComplete(taskData.complete)
+        .setPomodoros(taskData.pomodoros)
+        .setCreatedAt(taskData.created_at)
+        .setCompletedAt(taskData.completed_at)
+        .setProjectId(taskData.project_id)  // Make sure this links to the project
+        .build();
+      taskList.push(task); // Add to taskList
+      console.log('return from taskBuilder', task)
+      return task;
+    });
+
+    console.log('tasks = ', tasks)
+
+    return new ProjectBuilder(data.name)
       .setId(data.id)
       .setTime(data.time)
       .setPomodoros(data.pomodoros)
       .setCreatedAt(data.created_at)
       .setCompletedAt(data.completed_at)
-      .setTaskId(data.taskIds)
-      .build()
-  );
-  
+      .setTasks(tasks)  // Link Task objects to the project
+      .build();
+  });
+
+  // Add all projects to projectManager
   projectList.forEach(project => projectManager.addProject(project));
+
+  // Add all tasks to taskManager
+  taskList.forEach(task => taskManager.addTasks(task));
 }
 
 databaseAllProjectsFetch();
 
-// console.log("Project List: ", projectManager.getAllProjects())
+console.log("Project List: ", projectManager.getAllProjects())
 
-async function databaseAllTasksFetch() {
-  const response = await fetch('/api/task_data'); 
-  const taskData = await response.json(); 
+// async function databaseAllTasksFetch() {
+//   const response = await fetch('/api/task_data'); 
+//   const taskData = await response.json(); 
 
-  const taskList = taskData.map(data => 
-    new TaskBuilder(data.name)
-      .setId(data.id)
-      .setTime(data.time)
-      .setComplete(data.complete)
-      .setPomodoros(data.pomodoros)
-      .setCreatedAt(data.created_at)
-      .setCompletedAt(data.completed_at)
-      .setProjectId(data.project_id)
-      .build()
-  );
+//   const taskList = taskData.map(data => 
+//     new TaskBuilder(data.name)
+//       .setId(data.id)
+//       .setTime(data.time)
+//       .setComplete(data.complete)
+//       .setPomodoros(data.pomodoros)
+//       .setCreatedAt(data.created_at)
+//       .setCompletedAt(data.completed_at)
+//       .setProjectId(data.project_id)
+//       .build()
+//   );
   
-  taskList.forEach(task => {
-    taskManager.addTasks(task);
-  });
-}
+//   taskList.forEach(task => {
+//     taskManager.addTasks(task);
+//   });
+// }
 
-databaseAllTasksFetch();
+// databaseAllTasksFetch();
 
 // console.log("Task list", taskManager.getAllTasks())
 

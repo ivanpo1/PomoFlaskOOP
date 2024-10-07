@@ -24,10 +24,26 @@ class Task {
       this.name = name;
       this.notifyObservers();
     }
+
+    getName() {
+      return this.name;
+    }
+
+    getId() {
+      return this.id;
+    }
   
     setTime(time) {
       this.time = time;
       this.notifyObservers();
+    }
+
+    getTime() {
+      return this.time;
+    }
+
+    isComplete() {
+      return this.complete;
     }
   
     setComplete(complete) {
@@ -44,6 +60,10 @@ class Task {
     setProjectId(projectId) {
       this.projectId = projectId;
       this.notifyObservers();
+    }
+
+    getProjectId() {
+      return this.projectId;
     }
   
     markComplete() {

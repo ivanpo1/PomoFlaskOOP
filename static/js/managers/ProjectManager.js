@@ -1,5 +1,6 @@
+// import { projectManager } from "../app";
 
-export default class ProjectManager {
+class ProjectManager {
     constructor(stateManager, uiManager) {
       this.stateManager = stateManager;
       this.uiManager = uiManager;
@@ -13,10 +14,20 @@ export default class ProjectManager {
     removeProject(projectId) {
       this.projects = this.projects.filter(project => project.id !== projectId);
     }
+
+    getProjectById(projectId) {
+      const project = this.projects.find(project => project.id === Number(projectId))
+      return project;
+    }
   
     getAllProjects() {
       return this.projects;
     }
+
+    // update() {
+    //   project = this.projects.getProjectById(task.projectId);
+    //   project.
+    // }
   
     
     async fetchProjectData(projectId) {
@@ -98,3 +109,5 @@ export default class ProjectManager {
       }
     }
 }
+
+export default ProjectManager;

@@ -44,7 +44,7 @@ class Project(db.Model):
     def to_dict(self):
         project_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
-        project_dict['taskIds'] = [task.id for task in self.tasks]
+        project_dict['tasks'] = [task.to_dict() for task in self.tasks]
 
         return project_dict
 

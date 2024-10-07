@@ -1,6 +1,6 @@
 import initializeEventListeners from "./EventListenerManager.js";
 
-export default class UIManager {
+class UIManager {
   constructor(stateManager) {
     this.isEventListenersInitialized = false; 
     this.stateManager = stateManager;
@@ -10,6 +10,17 @@ export default class UIManager {
     this.deleteModal = document.getElementById('deleteModal');
     this.confirmDeleteBtn = document.getElementById('confirmDelete');
     this.cancelDeleteBtn = document.getElementById('cancelDelete');
+  }
+
+  update(task) {
+    if (task.isComplete()) {
+      const taskElement = document.querySelector(`.task-w-${task.id}`);
+      this.moveTask("incomplete-task-div", "complete-task-div", taskElement);
+    }
+    if (!task.isComplete()) {
+      const taskElement = document.querySelector(`.task-w-${task.id}`);
+      this.moveTask("complete-task-div", "incomplete-task-div", taskElement)
+    }
   }
 
   updateButtonStyles(type, button, previousButton) {
@@ -314,8 +325,6 @@ export default class UIManager {
   createCheckbox(task) {
     const checkboxWrapper = document.createElement("div");
     checkboxWrapper.className = "align-right checkbox-wrapper";
-    console.log('task.complete', task.complete)
-    console.log('task.complete?', task.complete ? 'yes' : 'no')
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -518,3 +527,6 @@ export default class UIManager {
     }, 10);  // Delay for 10 milliseconds
   }
 }
+
+
+export default UIManager;

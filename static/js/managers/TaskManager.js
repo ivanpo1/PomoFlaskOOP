@@ -10,6 +10,7 @@ class TaskManager {
   
     addTasks(task) {
       task.addObserver(this);
+      task.addObserver(this.uiManager)
       this.tasks.push(task);    
     }
 
@@ -177,10 +178,17 @@ class TaskManager {
       
       
       task.setComplete(true);
-      const taskElement = document.querySelector(`.task-w-${taskId}`);
-      this.uiManager.moveTask("incomplete-task-div", "complete-task-div", taskElement)
+      // const taskElement = document.querySelector(`.task-w-${taskId}`);
+      // this.uiManager.moveTask("incomplete-task-div", "complete-task-div", taskElement)
       
-      // this.uiManager.toggleSpinner(taskId, false);
+      // // this.uiManager.toggleSpinner(taskId, false);
+      // console.log(this.tasks.filter((t) => t && !t.complete && t.projectId === task.projectId).length)
+      // const project = this.projectManager.getProjectById(task.projectId)
+      // console.log(project.getIncompleteTasks(this).length)
+      
+      // const projectData = this.projectManager.getProjectById(task.projectId)
+      // console.log(projectData)
+      // this.uiManager.updateProjectInfoBox(projectData)
     }
 
     async uncheckTask(e) { 
@@ -191,8 +199,14 @@ class TaskManager {
       // this.uiManager.toggleSpinner(taskId, true);
         
       task.setComplete(false);
-      const taskElement = document.querySelector(`.task-w-${taskId}`);
-      this.uiManager.moveTask("complete-task-div", "incomplete-task-div", taskElement)
+      // const taskElement = document.querySelector(`.task-w-${taskId}`);
+      // this.uiManager.moveTask("complete-task-div", "incomplete-task-div", taskElement)
+
+
+      // const projectData = this.projectManager.getProjectById(task.projectId)
+      // console.log(projectData)
+      // this.uiManager.updateProjectInfoBox(projectData)
+
       
       // this.uiManager.toggleSpinner(taskId, false);
     }
