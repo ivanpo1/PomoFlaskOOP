@@ -8,14 +8,11 @@ from sqlalchemy.orm import joinedload
 from datetime import datetime
 
 
-
 def register_routes(app, db):
-
 
     @app.route("/")
     def index():
         return render_template("index.html")
-    
 
     @login_required
     @app.route("/timer", methods=['GET', 'POST'])
@@ -49,13 +46,13 @@ def register_routes(app, db):
 
         project_added = request.form.get('add_project')
         project = Project.query.filter_by(name=project_added).first()
-        
+
         # Check if project name already exist
 
         if project:
             projects = Project.query.all()
             return render_template("timer.html", projects=projects, tasks=tasks, project_exists=True)
-        
+
         # Create project on Database
 
         else:
@@ -72,10 +69,10 @@ def register_routes(app, db):
     def update_task(task_id):
         # Get the JSON data from the request
         data = request.json  
-        
+
         # Retrieve the task by its ID
         task = Task.query.get(task_id)
-        
+
         if task:
             task.name = data.get('name', task.name)  # Use current value if not provided
             task.time = data.get('time', task.time)
@@ -85,10 +82,10 @@ def register_routes(app, db):
             # json_datetime_str = data.get('completed_at', task.completed_at)
             # python_datetime = datetime.fromisoformat(json_datetime_str)
             # task.completed_at = python_datetime
-            
+
             # Commit the changes to the database
             db.session.commit()
-            
+
             return jsonify({"message": "Task updated successfully."}), 200
         else:
             return jsonify({"error": "Task not found."}), 404
@@ -100,17 +97,17 @@ def register_routes(app, db):
             # Check if task_name is empty
             if not task_name:
                 return jsonify({'error': 'Adding Task Failed: Task name is required'}), 400
-            
+
             # Find the project by project_id
             current_project = Project.query.filter_by(id=project_id).first()
-            
+
             # Check if the project exists
             if not current_project:
                 return jsonify({'error': 'Project not found'}), 404
 
             # Create new task
             task = Task(name=task_name, project_id=current_project.id, complete=False)
-            
+
             db.session.add(task)
             db.session.commit()
 
@@ -123,7 +120,6 @@ def register_routes(app, db):
                 # Something went wrong when converting or committing
                 return jsonify({'error': 'Adding Task Failed'}), 500
 
-
     @login_required
     @app.route("/delete_task/<task_id>", methods=["DELETE"])
     def delete_task(task_id):
@@ -133,10 +129,24 @@ def register_routes(app, db):
                 return jsonify({'success': False, 'message': f'Task {task_id} not found'}), 404
             db.session.delete(task)
             db.session.commit()
-            return jsonify({'success': True, 'message': f'Task {task_id} deleted successfully'})
+
+            success_message = jsonify(
+                {"success": True, 
+                 "message": f"Task {task_id} deleted successfully"}
+            )
+            return success_message
         except Exception as e:
-            return jsonify({'success': False, 'message': 'Error deleting task', 'error': str(e)}), 500
-    
+            error_message = (
+                jsonify(
+                    {
+                        "success": False,
+                        "message": "Error deleting task",
+                        "error": str(e),
+                    }
+                ),
+                500,
+            )
+            return error_message
 
     @login_required
     @app.route("/delete_project/<project_id>", methods=["DELETE"])
@@ -145,41 +155,34 @@ def register_routes(app, db):
             project = Project.query.get(project_id)
             if not project:
                 return jsonify({'success': False, 'message': f'Project {project_id} not found'}), 404
-            
+
             # Manually delete associated tasks
             Task.query.filter_by(project_id=project_id).delete()
-            
+
             db.session.delete(project)
             db.session.commit()
-            
+
             return jsonify({'success': True, 'message': f'Project {project_id} and its tasks deleted successfully'})
         except Exception as e:
             return jsonify({'success': False, 'message': 'Error deleting project', 'error': str(e)}), 500
-
-
-
 
     @login_required
     @app.route("/set_current_task/<string:task_name>", methods=['GET'])
     def set_current_task(task_name):
         session['current_task_name'] = task_name
-        
+
         return redirect(url_for('timer'))
 
-    
     @app.route('/set_flash')
     def set_flash():
         flash("This is a temporary flash message!")
         return redirect(url_for('index'))
-
 
     # @app.route('/set_current_project/<int:project_id>', methods=['GET'])
     # @login_required
     # def set_current_project(project_id):
     #     session['current_project_id'] = project_id
     #     return jsonify({'success': True, 'message': 'Current project set successfully'})
-    
-    
 
     @app.route('/api/projects/<int:project_id>', methods=['GET'])
     def get_project(project_id):
@@ -189,8 +192,8 @@ def register_routes(app, db):
         total_task_time = db.session.query(func.sum(Task.time)).filter(Task.project_id == project_id).scalar()
         completed_tasks_count = db.session.query(func.count(Task.id)).filter(Task.project_id == project_id, Task.complete == True).scalar()
         incomplete_tasks_count = db.session.query(func.count(Task.id)).filter(Task.project_id == project_id, Task.complete == False).scalar()
-        
-        # print(f"finished_task: {completed_tasks_count}")       
+
+        # print(f"finished_task: {completed_tasks_count}")
         # print(f"unfinished_task: {incomplete_tasks_count}")
 
         project.time = total_task_time or 0
@@ -216,7 +219,7 @@ def register_routes(app, db):
             db.session.commit()
 
             return jsonify({'success': True, 'message': f'Task {task_id} completed successfully'})
-        
+
         return jsonify({'error': 'Task not found'}), 404
 
     @app.route('/uncomplete/task/<int:task_id>')
@@ -227,7 +230,7 @@ def register_routes(app, db):
             db.session.commit()
 
             return jsonify({'success': True, 'message': f'Task {task_id} set as incompleted successfully'})
-        
+
         return jsonify({'error': 'Task not found'}), 404
 
     @app.route('/api/tasks/<int:task_id>', methods=['GET'])
@@ -241,8 +244,6 @@ def register_routes(app, db):
         else:
             return jsonify({'error': 'Project not found'}), 404
 
-    
-        
     @app.route("/register", methods=["GET", "POST"])
     def register():
         session.clear()
@@ -255,16 +256,16 @@ def register_routes(app, db):
 
             if username_exist:
                 return f"Username already exist"
-            
+
             if not username:
                 return f"Must provide username"
-            
+
             elif not request.form.get("password"):
                 return f"Must provide password"
-            
+
             elif not request.form.get("confirmation") == request.form.get("password"):
                 return f"Passwords don't match each other"
-            
+
             hash = generate_password_hash(request.form.get("password"), method='pbkdf2', salt_length=16)
 
             new_user = User(username=username, hash=hash)
@@ -273,9 +274,8 @@ def register_routes(app, db):
 
             flash("Registered!")
             return redirect("/")
-        
+
         return render_template("register.html")
-    
 
     @app.route("/login", methods=["GET", "POST"])
     def login():
@@ -289,7 +289,7 @@ def register_routes(app, db):
 
             elif not request.form.get("password"):
                 return f"must provide password"
-            
+
             username = request.form.get("username")
             user = User.query.filter_by(username=username).first()
             # print(user)
@@ -299,42 +299,38 @@ def register_routes(app, db):
                 user.hash, request.form.get("password")
             ):
                 return f"Invalid username and/or password"
-        
+
             session["user_id"] = user.id
             session["logged_as"] = f"Logged as {user.username}"
             flash("Logged in!")
-            
 
             return redirect("/")
-        
+
         else:
             return render_template("login.html")
-        
-    
+
     @app.route("/logout")
     def logout():
 
         session.clear()
 
         return redirect("/")
-    
+
     @app.route('/api/project_data')
     def get_project_data():
         # projects = Project.query.all()
         projects = Project.query.options(joinedload(Project.tasks)).all()
         return jsonify([project.to_dict() for project in projects])
-    
+
     @app.route('/api/task_data')
     def get_task_data():
         tasks = Task.query.all()
         return jsonify([task.to_dict() for task in tasks])
-    
-    
+
     @app.route('/chart')
     def chart():
         return render_template("chart.html")
 
-    
     @app.route('/save_time', methods=['POST'])
     def save_time():
         data_pomo = request.get_json()
@@ -345,7 +341,7 @@ def register_routes(app, db):
 
         project_to_update = Project.query.filter_by(id=project_id).first()
         task_to_update = Task.query.filter_by(id=task_id).first()
-        
+
         if project_to_update:  # Check if a project with the name exists
             current_time = int(project_to_update.time) if project_to_update.time else 0
             additional_time = int(elapsed_time) if elapsed_time else 0
@@ -362,9 +358,8 @@ def register_routes(app, db):
             task_to_update.time = current_time + additional_time
             db.session.commit()
 
-
         else:
-        # Handle the case where no project with the name is found
+            # Handle the case where no project with the name is found
             print("Project not found!")  # Or raise an exception
 
         # print(elapsed_time, task_to_update, project_to_update)
