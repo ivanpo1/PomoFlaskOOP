@@ -86,7 +86,7 @@ def register_routes(app, db):
             # Commit the changes to the database
             db.session.commit()
 
-            return jsonify({"message": "Task updated successfully."}), 200
+            return jsonify({"success": True, "message": "Task updated successfully."}), 200
         else:
             return jsonify({"error": "Task not found."}), 404
 
@@ -94,46 +94,42 @@ def register_routes(app, db):
     @app.route("/add_task/<task_name>/<project_id>", methods=["POST"])
     def add_task(task_name, project_id):
         if request.method == "POST":
-            # Validate inputs
             if not task_name:
                 return (
                     jsonify(
                         {
-                            "success": "false",
+                            "success": False,
                             "error": "Adding Task Failed: Task name is required",
                         }
                     ),
                     400,
                 )
-            if not project_id.isdigit():  # Check if project_id is a number
+            if not project_id.isdigit(): 
                 return (
-                    jsonify({"success": "false", "error": "Invalid project ID"}),
+                    jsonify({"success": False, "error": "Invalid project ID"}),
                     400,
                 )
 
-            # Find the project by project_id
             current_project = Project.query.filter_by(id=project_id).first()
 
-            # Check if the project exists
             if not current_project:
                 return (
-                    jsonify({"success": "false", "error": "Project not found"}),
+                    jsonify({"success": False, "error": "Project not found"}),
                     404,
                 )
 
-            # Create new task
             task = Task(name=task_name, project_id=current_project.id, complete=False)
 
             try:
                 db.session.add(task)
                 db.session.commit()
-                task = task.to_dict()  # Convert task to dictionary
-                return jsonify(task), 201  # Successfully created the task
+                task = task.to_dict()  
+                return jsonify(task), 201  
             except Exception as e:
-                db.session.rollback()  # Roll back in case of error
+                db.session.rollback() 
                 return (
                     jsonify(
-                        {"success": "false", "error": "Adding Task Failed: " + str(e)}
+                        {"success": False, "error": "Adding Task Failed: " + str(e)}
                     ),
                     500,
                 )
@@ -144,7 +140,7 @@ def register_routes(app, db):
         try:
             task = Task.query.get(task_id)
             if not task:
-                return jsonify({'success': False, 'message': f'Task {task_id} not found'}), 404
+                return jsonify({'success': False, 'error': f'Task {task_id} not found'}), 404
             db.session.delete(task)
             db.session.commit()
 
@@ -160,8 +156,7 @@ def register_routes(app, db):
                 jsonify(
                     {
                         "success": False,
-                        "message": "Error deleting task",
-                        "error": str(e),
+                        "error": "Error deleting task" + str(e),
                     }
                 ),
                 500,
@@ -174,7 +169,7 @@ def register_routes(app, db):
         try:
             project = Project.query.get(project_id)
             if not project:
-                return jsonify({'success': False, 'message': f'Project {project_id} not found'}), 404
+                return jsonify({'success': False, 'error': f'Project {project_id} not found'}), 404
 
             # Manually delete associated tasks
             Task.query.filter_by(project_id=project_id).delete()
@@ -184,7 +179,7 @@ def register_routes(app, db):
 
             return jsonify({'success': True, 'message': f'Project {project_id} and its tasks deleted successfully'})
         except Exception as e:
-            return jsonify({'success': False, 'message': 'Error deleting project', 'error': str(e)}), 500
+            return jsonify({'success': False, 'error': 'Error deleting project ' + str(e)}), 500
 
     @login_required
     @app.route("/set_current_task/<string:task_name>", methods=['GET'])

@@ -49,8 +49,6 @@ class Project(db.Model):
         return project_dict
 
 
-
-
 class Task(db.Model):
     __tablename__ = 'tasks'
 
