@@ -23,3 +23,12 @@ class TaskService:
             return True, None, task.to_dict(), 201
         else:
             return False, f"Adding Task Failed: {error}", None, 500
+        
+    @staticmethod
+    def delete_task(task_id):
+        if not task_id:
+            return False, "Deleting Task Failed: Invalid Task ID", None, 400
+        
+        task = TaskRepository.get_by_id(task_id)
+        if not task:
+            return False, "Deleting Task Failed: Task not found", None, 404
