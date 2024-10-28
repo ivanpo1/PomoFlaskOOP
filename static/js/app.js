@@ -100,6 +100,7 @@ addTaskForm.addEventListener("submit", async function (event) {
 
   let taskName = addTaskForm.elements["name_task"].value;
   const task = await taskManager.addTaskToDatabase(taskName);
+  console.log('logeamos task from taskManager.addTask', task)
   addTaskForm.reset();
   if (task) {
     const taskItem = uiManager.createTaskElement(task);
@@ -131,11 +132,9 @@ async function databaseAllProjectsFetch() {
         .setProjectId(taskData.project_id)  // Make sure this links to the project
         .build();
       taskList.push(task); // Add to taskList
-      console.log('return from taskBuilder', task)
       return task;
     });
 
-    console.log('tasks = ', tasks)
 
     return new ProjectBuilder(data.name)
       .setId(data.id)
@@ -156,7 +155,7 @@ async function databaseAllProjectsFetch() {
 
 databaseAllProjectsFetch();
 
-console.log("Project List: ", projectManager.getAllProjects())
+// console.log("Project List: ", projectManager.getAllProjects())
 
 // async function databaseAllTasksFetch() {
 //   const response = await fetch('/api/task_data'); 

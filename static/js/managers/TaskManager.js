@@ -103,14 +103,14 @@ class TaskManager {
           },
         });
     
-        const taskData = await response.json();
+        const responseJSON = await response.json();
     
         if (!response.ok) { // Check if the response status is OK
-          throw new Error(taskData.error || "Failed to add task");
+          throw new Error(responseJSON.error || "Failed to add task");
         }
     
-        console.log("addTask successful, task:", taskData);
-        return taskData;
+        console.log("addTask successful, task:", responseJSON.data);
+        return responseJSON.data;
       } catch (error) {
         console.error("Error adding task: ", error);
         return null;
