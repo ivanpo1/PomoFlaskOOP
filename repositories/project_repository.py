@@ -1,4 +1,4 @@
-from models.project import Project
+from models import Project
 from utils.database_handler import DatabaseHandler
 
 class ProjectRepository:

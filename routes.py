@@ -6,8 +6,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 from datetime import datetime
-from repositories.project_repository import ProjectRepository
-from services.task_service import TaskService
+from repositories import ProjectRepository
+from services import TaskService
 
 
 def register_routes(app, db):

@@ -1,4 +1,4 @@
-from models.task import Task
+from models import Task
 from utils.database_handler import DatabaseHandler
 
 class TaskRepository:
