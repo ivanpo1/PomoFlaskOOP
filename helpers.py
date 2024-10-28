@@ -1,5 +1,6 @@
 from functools import wraps
-from flask import redirect, session
+from flask import redirect, session, jsonify
+
 
 def convert_millis_to_min_sec(milliseconds):
     seconds = milliseconds // 1000
@@ -26,3 +27,11 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
+def create_response(success, error=None, data=None, code=200):
+    response = {
+        "success": success,
+        "error": error,
+        "data": data,
+    }
+    return jsonify(response), code

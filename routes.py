@@ -6,6 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 from datetime import datetime
+from repositories.project_repository import ProjectRepository
 
 
 def register_routes(app, db):
@@ -167,7 +168,8 @@ def register_routes(app, db):
     @app.route("/delete_project/<project_id>", methods=["DELETE"])
     def delete_project(project_id):
         try:
-            project = Project.query.get(project_id)
+            # project = Project.query.get(project_id)
+            project = ProjectRepository.get_by_id(project_id)
             if not project:
                 return jsonify({'success': False, 'error': f'Project {project_id} not found'}), 404
 
