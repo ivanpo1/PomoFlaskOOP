@@ -1,5 +1,5 @@
 from flask import render_template, request, flash, redirect, url_for, session, jsonify
-from helpers import convert_millis_to_min_sec, get_current_project, login_required
+from helpers import login_required, create_response
 import json
 from models import User, Project, Task
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -7,6 +7,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 from datetime import datetime
 from repositories.project_repository import ProjectRepository
+from services.task_service import TaskService
 
 
 def register_routes(app, db):
@@ -93,47 +94,10 @@ def register_routes(app, db):
 
     @login_required
     @app.route("/add_task/<task_name>/<project_id>", methods=["POST"])
-    def add_task(task_name, project_id):
+    def add_task(task_name, project_id):        
         if request.method == "POST":
-            if not task_name:
-                return (
-                    jsonify(
-                        {
-                            "success": False,
-                            "error": "Adding Task Failed: Task name is required",
-                        }
-                    ),
-                    400,
-                )
-            if not project_id.isdigit(): 
-                return (
-                    jsonify({"success": False, "error": "Invalid project ID"}),
-                    400,
-                )
-
-            current_project = Project.query.filter_by(id=project_id).first()
-
-            if not current_project:
-                return (
-                    jsonify({"success": False, "error": "Project not found"}),
-                    404,
-                )
-
-            task = Task(name=task_name, project_id=current_project.id, complete=False)
-
-            try:
-                db.session.add(task)
-                db.session.commit()
-                task = task.to_dict()  
-                return jsonify(task), 201  
-            except Exception as e:
-                db.session.rollback() 
-                return (
-                    jsonify(
-                        {"success": False, "error": "Adding Task Failed: " + str(e)}
-                    ),
-                    500,
-                )
+            success, error, data, code = TaskService.add_task(task_name, project_id)
+            return create_response(success, error=error, data=data, code=code)
 
     @login_required
     @app.route("/delete_task/<task_id>", methods=["DELETE"])
