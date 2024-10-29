@@ -270,36 +270,36 @@ def register_routes(app, db):
     def chart():
         return render_template("chart.html")
 
-    @app.route('/save_time', methods=['POST'])
-    def save_time():
-        data_pomo = request.get_json()
-        elapsed_time = data_pomo['time']
-        date = data_pomo['date']
-        project_id = data_pomo['project_id']
-        task_id = data_pomo['task_id']
+    # @app.route('/save_time', methods=['POST'])
+    # def save_time():
+    #     data_pomo = request.get_json()
+    #     elapsed_time = data_pomo['time']
+    #     date = data_pomo['date']
+    #     project_id = data_pomo['project_id']
+    #     task_id = data_pomo['task_id']
 
-        project_to_update = Project.query.filter_by(id=project_id).first()
-        task_to_update = Task.query.filter_by(id=task_id).first()
+    #     project_to_update = Project.query.filter_by(id=project_id).first()
+    #     task_to_update = Task.query.filter_by(id=task_id).first()
 
-        if project_to_update:  # Check if a project with the name exists
-            current_time = int(project_to_update.time) if project_to_update.time else 0
-            additional_time = int(elapsed_time) if elapsed_time else 0
-            project_to_update.time = current_time + additional_time
-            db.session.commit()
+    #     if project_to_update:  # Check if a project with the name exists
+    #         current_time = int(project_to_update.time) if project_to_update.time else 0
+    #         additional_time = int(elapsed_time) if elapsed_time else 0
+    #         project_to_update.time = current_time + additional_time
+    #         db.session.commit()
 
-        if task_to_update:
-            if task_to_update.time:
-                current_time = task_to_update.time
-            else:
-                current_time = 0
-            additional_time = int(elapsed_time) if elapsed_time else 0
-            # print(f"task_to_update: current_time = {current_time} - elapsed_time = {additional_time}")
-            task_to_update.time = current_time + additional_time
-            db.session.commit()
+    #     if task_to_update:
+    #         if task_to_update.time:
+    #             current_time = task_to_update.time
+    #         else:
+    #             current_time = 0
+    #         additional_time = int(elapsed_time) if elapsed_time else 0
+    #         # print(f"task_to_update: current_time = {current_time} - elapsed_time = {additional_time}")
+    #         task_to_update.time = current_time + additional_time
+    #         db.session.commit()
 
-        else:
-            # Handle the case where no project with the name is found
-            print("Project not found!")  # Or raise an exception
+    #     else:
+    #         # Handle the case where no project with the name is found
+    #         print("Project not found!")  # Or raise an exception
 
-        # print(elapsed_time, task_to_update, project_to_update)
-        return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+    #     # print(elapsed_time, task_to_update, project_to_update)
+    #     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
