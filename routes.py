@@ -96,8 +96,8 @@ def register_routes(app, db):
     @app.route("/add_task/<task_name>/<project_id>", methods=["POST"])
     def add_task(task_name, project_id):        
         if request.method == "POST":
-            success, error, data, code = TaskService.add_task(task_name, project_id)
-            return create_response(success, error=error, data=data, code=code)
+            response = TaskService.add_task(task_name, project_id)
+            return create_response(response)
 
     @login_required
     @app.route("/delete_task/<task_id>", methods=["DELETE"])

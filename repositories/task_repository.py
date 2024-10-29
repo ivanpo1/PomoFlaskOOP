@@ -9,8 +9,7 @@ class TaskRepository:
     @staticmethod
     def delete_task(task_id):
         task = Task.query.get(task_id)
-        if task:
-            DatabaseHandler.delete(task)
+        return DatabaseHandler.delete(task)
         
     @staticmethod
     def get_by_id(task_id):

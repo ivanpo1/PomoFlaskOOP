@@ -1,5 +1,6 @@
 from functools import wraps
 from flask import redirect, session, jsonify
+from collections import namedtuple
 
 
 # def convert_millis_to_min_sec(milliseconds):
@@ -28,10 +29,20 @@ def login_required(f):
 
     return decorated_function
 
-def create_response(success, error=None, data=None, code=200):
-    response = {
-        "success": success,
-        "error": error,
-        "data": data,
+
+Response = namedtuple('Response', ['success', 'error', 'data', 'code'])
+"""
+Attributes:
+    success (bool): Indicates if the operation was successful.
+    error (str or None): Error message if the operation failed.
+    data (any or None): Data payload if the operation was successful.
+    code (int): HTTP status code of the response.
+"""
+
+def create_response(response):
+    response_dict = {
+        "success": response.success,
+        "error": response.error,
+        "data": response.data,
     }
-    return jsonify(response), code
+    return jsonify(response_dict), response.code
