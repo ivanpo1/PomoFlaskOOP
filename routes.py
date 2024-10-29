@@ -102,31 +102,8 @@ def register_routes(app, db):
     @login_required
     @app.route("/delete_task/<task_id>", methods=["DELETE"])
     def delete_task(task_id):
-        try:
-            task = Task.query.get(task_id)
-            if not task:
-                return jsonify({'success': False, 'error': f'Task {task_id} not found'}), 404
-            db.session.delete(task)
-            db.session.commit()
-
-            success_message = jsonify(
-                {
-                 "success": True, 
-                 "message": f"Task {task_id} deleted successfully"
-                }
-            )
-            return success_message
-        except Exception as e:
-            error_message = (
-                jsonify(
-                    {
-                        "success": False,
-                        "error": "Error deleting task" + str(e),
-                    }
-                ),
-                500,
-            )
-            return error_message
+        response = TaskService.delete_task(task_id)
+        return create_response(response)
 
     @login_required
     @app.route("/delete_project/<project_id>", methods=["DELETE"])
