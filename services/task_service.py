@@ -47,7 +47,7 @@ class TaskService:
         task = TaskRepository.get_by_id(task_id)
         
         if not task:
-            return Response(False, "Task not found", None, 404)
+            return Response(False, "Updating Task Failed: Task not found", None, 404)
         
         task.name = data.get('name', task.name)
         task.time = data.get('time', task.time)
@@ -58,13 +58,13 @@ class TaskService:
             try:
                 task.completed_at = datetime.fromisoformat(data['completed_at'])
             except ValueError:
-                return Response(False, "Invalid date format for completed_at", None, 400)
+                return Response(False, "Updating Task Failed: Invalid date format for completed_at", None, 400)
         
         success, error = TaskRepository.update(task)
         if success:
             return Response(True, "Task updated successfully", task.to_dict(), 200)
         else:
-            return Response(False, f"Task update failed: {error}", None, 500)
+            return Response(False, f"Updating Task Failed: {error}", None, 500)
         
     @staticmethod
     def get_task_by_id(task_id):
