@@ -3,6 +3,7 @@ from utils.database_handler import DatabaseHandler
 from repositories.project_repository import ProjectRepository
 from repositories.task_repository import TaskRepository
 from helpers import Response
+from datetime import datetime
 
 class TaskService:
     @staticmethod
@@ -40,6 +41,30 @@ class TaskService:
             return Response(True, None, None, 201)
         else:
             return Response(False, f"Deleting Task Failed: {error}", None, 500)
+        
+    @staticmethod
+    def update_task(task_id, data):
+        task = TaskRepository.get_by_id(task_id)
+        
+        if not task:
+            return Response(False, "Task not found", None, 404)
+        
+        task.name = data.get('name', task.name)
+        task.time = data.get('time', task.time)
+        task.complete = data.get('complete', task.complete)
+        task.pomodoros = data.get('pomodoros', task.pomodoros)
+        
+        if 'completed_at' in data:
+            try:
+                task.completed_at = datetime.fromisoformat(data['completed_at'])
+            except ValueError:
+                return Response(False, "Invalid date format for completed_at", None, 400)
+        
+        success, error = TaskRepository.update(task)
+        if success:
+            return Response(True, "Task updated successfully", task.to_dict(), 200)
+        else:
+            return Response(False, f"Task update failed: {error}", None, 500)
         
     @staticmethod
     def get_task_by_id(task_id):

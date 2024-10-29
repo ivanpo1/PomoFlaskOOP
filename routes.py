@@ -69,28 +69,9 @@ def register_routes(app, db):
 
     @app.route('/api/task/<int:task_id>', methods=['PUT'])
     def update_task(task_id):
-        # Get the JSON data from the request
-        data = request.json  
-
-        # Retrieve the task by its ID
-        task = Task.query.get(task_id)
-
-        if task:
-            task.name = data.get('name', task.name)  # Use current value if not provided
-            task.time = data.get('time', task.time)
-            task.complete = data.get('complete', task.complete)
-            task.pomodoros = data.get('pomodoros', task.pomodoros)
-            # task.completed_at = data.get('completed_at', task.completed_at)
-            # json_datetime_str = data.get('completed_at', task.completed_at)
-            # python_datetime = datetime.fromisoformat(json_datetime_str)
-            # task.completed_at = python_datetime
-
-            # Commit the changes to the database
-            db.session.commit()
-
-            return jsonify({"success": True, "message": "Task updated successfully."}), 200
-        else:
-            return jsonify({"error": "Task not found."}), 404
+        data = request.json
+        response = TaskService.update_task(task_id, data)
+        return create_response(response)
 
     @login_required
     @app.route("/add_task/<task_name>/<project_id>", methods=["POST"])

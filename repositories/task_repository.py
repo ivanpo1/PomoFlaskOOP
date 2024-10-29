@@ -10,6 +10,11 @@ class TaskRepository:
     def delete_task(task_id):
         task = Task.query.get(task_id)
         return DatabaseHandler.delete(task)
+    
+    @staticmethod
+    def update():
+        return DatabaseHandler.commit()
+
         
     @staticmethod
     def get_by_id(task_id):
