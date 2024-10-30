@@ -5,7 +5,7 @@ from app.utils import create_response
 
 tasks_bp = Blueprint('tasks', __name__, url_prefix='/tasks')
 
-@tasks_bp.route("/<int:task_id>", methods=["PUT"])
+@tasks_bp.route("/api/task/<int:task_id>", methods=["PUT"])
 def update_task(task_id):
     data = request.json
     response = TaskService.update_task(task_id, data)

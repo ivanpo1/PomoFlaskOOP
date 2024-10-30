@@ -6,5 +6,5 @@ class UserService:
     def add_user(user_data):
         # Validation logic here
         user = User(name=user_data['name'])
-        UserRepository.save(user)
+        UserRepository.add(user)
         return user.to_dict()
