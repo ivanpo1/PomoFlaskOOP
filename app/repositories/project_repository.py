@@ -1,5 +1,5 @@
-from models import Project
-from utils.database_handler import DatabaseHandler
+from app.models import Project
+from app.utils import DatabaseHandler
 
 class ProjectRepository:
     @staticmethod

@@ -1,5 +1,6 @@
-from flask import Blueprint
+from .routes import projects_bp
+from app.models import Project
+from app.services import ProjectService
+from app.repositories import ProjectRepository
 
-projects_bp = Blueprint('projects', __name__, url_prefix='/projects')
-
-from . import routes
+__all__ = ["projects_bp", "Project", "ProjectService", "ProjectRepository"]

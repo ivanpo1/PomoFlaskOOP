@@ -1,5 +1,5 @@
-from repositories.project_repository import ProjectRepository
-from models import Project
+from app.repositories import ProjectRepository
+from app.models import Project
 
 class ProjectService:
     @staticmethod

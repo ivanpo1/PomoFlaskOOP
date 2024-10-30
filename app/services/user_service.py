@@ -1,5 +1,5 @@
-from models import User
-from repositories import UserRepository
+from app.models import User
+from app.repositories import UserRepository
 
 class UserService:
     @staticmethod

@@ -1,5 +1,5 @@
-from models import Task
-from utils.database_handler import DatabaseHandler
+from app.models import Task
+from app.utils import DatabaseHandler
 
 class TaskRepository:
     @staticmethod

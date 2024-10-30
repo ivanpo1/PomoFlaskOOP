@@ -1,72 +1,72 @@
-from app import db
-from sqlalchemy import ForeignKey, DateTime, func
-from datetime import datetime, timezone
+# from app import db
+# from sqlalchemy import ForeignKey, DateTime, func
+# from datetime import datetime, timezone
 
-class User(db.Model):
-    __tablename__ = 'users'
+# class User(db.Model):
+#     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Text, nullable=False)
-    hash = db.Column(db.Text, nullable=False)
-    pomodoros = db.Column(db.Integer, default=0)
-    time = db.Column(db.Integer, default=0)
-    created_at = db.Column(DateTime, default=func.now())
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.Text, nullable=False)
+#     hash = db.Column(db.Text, nullable=False)
+#     pomodoros = db.Column(db.Integer, default=0)
+#     time = db.Column(db.Integer, default=0)
+#     created_at = db.Column(DateTime, default=func.now())
 
-    # Relationship with Projects: One User can have Many Projects
-    projects = db.relationship('Project', backref='user', lazy='dynamic')
+#     # Relationship with Projects: One User can have Many Projects
+#     projects = db.relationship('Project', backref='user', lazy='dynamic')
 
-    def __repr__(self):
-        return f'User: {self.username}'
+#     def __repr__(self):
+#         return f'User: {self.username}'
 
 
-class Project(db.Model):
-    __tablename__ = 'projects'
+# class Project(db.Model):
+#     __tablename__ = 'projects'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
-    time = db.Column(db.Integer, default=0)
-    complete = db.Column(db.Boolean, default=False)
-    pomodoros = db.Column(db.Integer, default=0)
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.Text, nullable=False)
+#     time = db.Column(db.Integer, default=0)
+#     complete = db.Column(db.Boolean, default=False)
+#     pomodoros = db.Column(db.Integer, default=0)
 
-    # Dates
-    created_at = db.Column(DateTime, default=func.now())
-    completed_at = db.Column(DateTime)
+#     # Dates
+#     created_at = db.Column(DateTime, default=func.now())
+#     completed_at = db.Column(DateTime)
 
-    # Relationship with User: Many Projects belong to One User (Foreign Key)
-    user_id = db.Column(db.Integer, ForeignKey('users.id'))
+#     # Relationship with User: Many Projects belong to One User (Foreign Key)
+#     user_id = db.Column(db.Integer, ForeignKey('users.id'))
 
-    # Relationship with Tasks: One Project can have Many Tasks
-    tasks = db.relationship('Task', backref='project')
+#     # Relationship with Tasks: One Project can have Many Tasks
+#     tasks = db.relationship('Task', backref='project')
 
-    def __repr__(self):
-        return f'Project: {self.name} {[task.id for task in self.tasks]} {self.tasks}'
+#     def __repr__(self):
+#         return f'Project: {self.name} {[task.id for task in self.tasks]} {self.tasks}'
 
-    def to_dict(self):
-        project_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+#     def to_dict(self):
+#         project_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
-        project_dict['tasks'] = [task.to_dict() for task in self.tasks]
+#         project_dict['tasks'] = [task.to_dict() for task in self.tasks]
 
-        return project_dict
+#         return project_dict
 
 
-class Task(db.Model):
-    __tablename__ = 'tasks'
+# class Task(db.Model):
+#     __tablename__ = 'tasks'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
-    time = db.Column(db.Integer, default=0)
-    complete = db.Column(db.Boolean, default=False)
-    pomodoros = db.Column(db.Integer, default=0)
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.Text, nullable=False)
+#     time = db.Column(db.Integer, default=0)
+#     complete = db.Column(db.Boolean, default=False)
+#     pomodoros = db.Column(db.Integer, default=0)
 
-    # Dates
-    created_at = db.Column(DateTime, default=func.now())
-    completed_at = db.Column(DateTime)
+#     # Dates
+#     created_at = db.Column(DateTime, default=func.now())
+#     completed_at = db.Column(DateTime)
 
-    # Relationship with Project: Many Tasks belong to One Project (Foreign Key)
-    project_id = db.Column(db.Integer, ForeignKey('projects.id'))
+#     # Relationship with Project: Many Tasks belong to One Project (Foreign Key)
+#     project_id = db.Column(db.Integer, ForeignKey('projects.id'))
 
-    def __repr__(self):
-        return f'Task: {self.name}' 
+#     def __repr__(self):
+#         return f'Task: {self.name}' 
     
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}    
+#     def to_dict(self):
+#         return {c.name: getattr(self, c.name) for c in self.__table__.columns}    

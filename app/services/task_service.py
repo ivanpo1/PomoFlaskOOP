@@ -1,8 +1,7 @@
-from models import Task
-from utils.database_handler import DatabaseHandler
-from repositories.project_repository import ProjectRepository
-from repositories.task_repository import TaskRepository
-from helpers import Response
+from app.models import Task
+from app.repositories import ProjectRepository
+from app.repositories import TaskRepository
+from app.utils.helpers import Response
 from datetime import datetime
 
 class TaskService:
