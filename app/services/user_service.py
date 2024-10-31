@@ -4,11 +4,10 @@ from app.utils.helpers import Response
 
 class UserService:
     @staticmethod
-    def add_user(user_data):
-        # Validation logic here
-        user = User(name=user_data['name'])
-        UserRepository.add(user)
-        return user.to_dict()
+    # def add_user(user_data):
+    #     user = User(name=user_data['name'])
+    #     UserRepository.save(user)
+    #     return user.to_dict()
     
     @staticmethod
     def get_user_by_id(user_id):

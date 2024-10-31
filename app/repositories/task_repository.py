@@ -3,18 +3,13 @@ from app.utils import DatabaseHandler
 
 class TaskRepository:
     @staticmethod
-    def add(task):
+    def save(task):
         return DatabaseHandler.add(task)
 
     @staticmethod
     def delete_task(task_id):
         task = Task.query.get(task_id)
         return DatabaseHandler.delete(task)
-    
-    @staticmethod
-    def update():
-        return DatabaseHandler.commit()
-
         
     @staticmethod
     def get_by_id(task_id):

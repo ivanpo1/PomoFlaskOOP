@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import User, db
 from app.auth import AuthService
 from app.utils.helpers import create_response, login_required
+from app.services import UserService
 
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -40,36 +41,25 @@ def register():
 
     return render_template("register.html")
 
-@auth_bp.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/login", methods=["POST"])
 def login():
     session.clear()
 
-    if request.method == "POST":
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
 
-        if not request.form.get("username"):
-            return f"must provide username"
+    response = AuthService.login_user(username, password)
 
-        elif not request.form.get("password"):
-            return f"must provide password"
+    if not response.success:
+        return create_response(response)
 
-        username = request.form.get("username")
-        user = User.query.filter_by(username=username).first()
-        # print(user)
-        # print(user.id)
+    
+    session["user_id"] = response.data["user_id"]
+    session["logged_as"] = f"Logged as {response.data['username']}"
+    flash("Logged in!")
 
-        if not user or not check_password_hash(
-            user.hash, request.form.get("password")
-        ):
-            return f"Invalid username and/or password"
-
-        session["user_id"] = user.id
-        session["logged_as"] = f"Logged as {user.username}"
-        flash("Logged in!")
-
-        return redirect("/")
-
-    else:
-        return render_template("login.html")
+    return create_response(response)
 
 @auth_bp.route("/logout")
 def logout():
@@ -82,7 +72,7 @@ def logout():
 @login_required
 def change_password():
     data = request.json
-    
-    response = AuthService.change_password(current_user, data.get('current_password'), data.get('new_password'))
+    user = UserService.get_user_by_id(session["user_id"])
+    response = AuthService.change_password(user, data.get('current_password'), data.get('new_password'))
     return create_response(response)
 

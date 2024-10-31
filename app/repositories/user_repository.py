@@ -3,7 +3,7 @@ from app.utils.helpers import DatabaseHandler
 
 class UserRepository:
     @staticmethod
-    def add(user):
+    def save(user):
         return DatabaseHandler.add(user)
     
     @staticmethod

@@ -15,6 +15,14 @@ class AuthService:
         UserRepository.save(new_user)
         return Response(True, None, new_user, 201)
     
+    def login_user(username, password):
+        user = UserRepository.find_by_username(username)
+        if not user or not check_password_hash(user.password_hash, password):
+            return Response(False, "Invalid username and/or password", None, 401)
+
+        # Return the essential data needed for the session
+        return Response(True, None, {"user_id": user.id, "username": user.username}, 200)
+    
     @staticmethod
     def change_password(user, current_password, new_password):
         if not check_password_hash(user.password_hash, current_password):

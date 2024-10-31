@@ -18,7 +18,7 @@ class TaskService:
             return Response(False, "Adding Task Failed: Project not found", None, 404)
 
         task = Task(name=task_name, project_id=project.id, complete=False)
-        success, error = TaskRepository.add(task)
+        success, error = TaskRepository.save(task)
         
         if success:
             return Response(True, None, task.to_dict(), 201)
@@ -59,7 +59,7 @@ class TaskService:
             except ValueError:
                 return Response(False, "Updating Task Failed: Invalid date format for completed_at", None, 400)
         
-        success, error = TaskRepository.update(task)
+        success, error = TaskRepository.save(task)
         if success:
             return Response(True, "Task updated successfully", task.to_dict(), 200)
         else:
