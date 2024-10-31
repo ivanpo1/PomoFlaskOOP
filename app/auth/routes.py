@@ -1,7 +1,9 @@
 from flask import Blueprint, request, redirect, render_template, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import User
-from app.models import db
+from app.models import User, db
+from app.auth import AuthService
+from app.utils.helpers import create_response, login_required
+
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -75,3 +77,12 @@ def logout():
     session.clear()
 
     return redirect("/")
+
+@auth_bp.route('/change-password', methods=['POST'])
+@login_required
+def change_password():
+    data = request.json
+    
+    response = AuthService.change_password(current_user, data.get('current_password'), data.get('new_password'))
+    return create_response(response)
+
