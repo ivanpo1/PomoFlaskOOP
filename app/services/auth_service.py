@@ -12,9 +12,11 @@ class AuthService:
         
         hashed_password = generate_password_hash(password)
         new_user = User(username=username, hash=hashed_password)
+        print('new_user', new_user)
         success, error = UserRepository.save(new_user)
+        print('success, error', success, error)
         if success:
-            return Response(True, None, new_user, 201)
+            return Response(True, None, new_user.to_dict(), 201)
         else:
             return Response(False, f'Failed to Register: {error}', None, 500)
 

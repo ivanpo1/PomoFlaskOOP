@@ -15,7 +15,7 @@ class ProjectRepository:
         return Project.query.filter_by(name=project_name).first()
     
     @staticmethod
-    def get_all():
+    def get_all_projects():
         return Project.query.all()
 
     @staticmethod

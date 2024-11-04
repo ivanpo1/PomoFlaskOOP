@@ -3,6 +3,7 @@ from app.auth import auth_bp
 from app.tasks import tasks_bp
 from app.projects import projects_bp
 from app.main import main_bp
+from app.timer import timer_bp
 from app.models import db
 
 def create_app():
@@ -17,5 +18,6 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(tasks_bp)
     app.register_blueprint(projects_bp)
+    app.register_blueprint(timer_bp)
 
     return app

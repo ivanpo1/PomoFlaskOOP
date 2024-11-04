@@ -1,44 +1,31 @@
-// FormManager.js
 export class FormManager {
     constructor() {
         this.forms = {};
-        this.setupFormListeners();
-    }
-
-    setupFormListeners() {
-        // Common form setup logic
-        document.addEventListener('submit', (e) => this.handleFormSubmit(e));
     }
 
     registerForm(formId, config) {
-        this.forms[formId] = {
-            validators: config.validators || {},
-            onSubmit: config.onSubmit,
-            onSuccess: config.onSuccess,
-            onError: config.onError
-        };
-    }
+        const form = document.getElementById(formId);
+        if (!form) return;
 
-    async handleFormSubmit(e) {
-        if (!this.forms[e.target.id]) return;
-        
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const formConfig = this.forms[e.target.id];
-        
-        if (!this.validateForm(formData, formConfig.validators)) return;
+        // Initialize Just-Validate
+        const validator = new JustValidate(form, {
+            validateBeforeSubmitting: true,
+        });
 
-        try {
-            const response = await formConfig.onSubmit(formData);
-            formConfig.onSuccess?.(response);
-        } catch (error) {
-            formConfig.onError?.(error);
-        }
-    }
+        // Add validation rules
+        config.validationRules(validator);
 
-    validateForm(formData, validators) {
-        // Implement validation logic
-        return true;
+        // Handle form submission
+        validator.onSuccess(async (event) => {
+            try {
+                const formData = new FormData(form);
+                const response = await config.onSubmit(formData);
+                config.onSuccess?.(response);
+            } catch (error) {
+                config.onError?.(error);
+            }
+        });
+
+        this.forms[formId] = validator;
     }
 }
-

@@ -19,6 +19,7 @@ def register():
     data = request.get_json()
     username = data.get("username")
     password = data.get("password")
+    print('register route data:username:password', data, username, password)
 
     response = AuthService.register_user(username, password)
 

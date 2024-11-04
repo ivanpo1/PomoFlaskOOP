@@ -1,18 +1,29 @@
 // forms/loginForm.js
 export const loginFormConfig = {
-    validators: {
-        username: (value) => {
-            if (!value || value.trim().length < 3) {
-                return { valid: false, error: 'Username must be at least 3 characters' };
-            }
-            return { valid: true };
-        },
-        password: (value) => {
-            if (!value || value.length < 4) {
-                return { valid: false, error: 'Password is required' };
-            }
-            return { valid: true };
-        }
+    validationRules: (validator) => {
+        validator
+            .addField('#username', [
+                {
+                    rule: 'required',
+                    errorMessage: 'Username is required'
+                },
+                {
+                    rule: 'minLength',
+                    value: 3,
+                    errorMessage: 'Username must be at least 3 characters'
+                }
+            ])
+            .addField('#password', [
+                {
+                    rule: 'required',
+                    errorMessage: 'Password is required'
+                },
+                {
+                    rule: 'minLength',
+                    value: 4,
+                    errorMessage: 'Password must be at least 4 characters'
+                }
+            ]);
     },
     onSubmit: async (formData) => {
         const formJson = {
