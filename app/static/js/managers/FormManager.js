@@ -1,5 +1,5 @@
 // FormManager.js
-class FormManager {
+export class FormManager {
     constructor() {
         this.forms = {};
         this.setupFormListeners();
@@ -42,6 +42,3 @@ class FormManager {
     }
 }
 
-
-
-export default FormManager;

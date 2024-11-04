@@ -50,10 +50,14 @@ def login():
     session.clear()
 
     data = request.json
+    print('@auth_bp.route: LOGIN', data)
     username = data.get("username")
+    print('@auth_bp.route: username', username)
     password = data.get("password")
+    print('@auth_bp.route: password', password)
 
     response = AuthService.login_user(username, password)
+    print('AuthService.login_user(username, password)', response)
 
     if not response.success:
         return create_response(response)

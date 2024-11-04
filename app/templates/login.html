@@ -1,15 +1,9 @@
 {% extends "layout.html" %}
 
-{% block head %}
 {% block title %}
     Log In
 {% endblock %}
-<script src="/static/js/managers/FormManager.js" defer></script>
-<script defer type="module"> 
-    const formManager = new FormManager();
-    formManager.setupFormListeners();
-</script>
-{% endblock %}
+
 
 {% block main %}
     <!-- <form action="/login" method="post">
