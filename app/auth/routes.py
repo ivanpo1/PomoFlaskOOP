@@ -1,9 +1,9 @@
 from flask import Blueprint, request, redirect, render_template, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import User, db
-from app.auth import AuthService
 from app.utils.helpers import create_response, login_required
 from app.services import UserService
+from app.services import AuthService
 
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -53,7 +53,6 @@ def login():
 
     if not response.success:
         return create_response(response)
-
     
     session["user_id"] = response.data["user_id"]
     session["logged_as"] = f"Logged as {response.data['username']}"

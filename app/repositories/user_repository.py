@@ -1,5 +1,5 @@
 from app.models import User
-from app.utils.helpers import DatabaseHandler
+from app.utils import DatabaseHandler
 
 class UserRepository:
     @staticmethod
@@ -25,4 +25,4 @@ class UserRepository:
     def update_user(user, data):
         for key, value in data.items():
             setattr(user, key, value)
-        DatabaseHandler.commit()
+        return DatabaseHandler.commit()
