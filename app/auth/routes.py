@@ -8,38 +8,21 @@ from app.services import AuthService
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@auth_bp.route("/register", methods=["GET", "POST"])
+@auth_bp.route("/register", methods=["GET"])
+def register_form():
+    return render_template("register.html")
+
+@auth_bp.route("/register", methods=["POST"])
 def register():
     session.clear()
+    
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
 
-    if request.method == "POST":
+    response = AuthService.register_user(username, password)
 
-        username = request.form.get("username")
-
-        username_exist = User.query.filter_by(username=username).first()
-
-        if username_exist:
-            return f"Username already exist"
-
-        if not username:
-            return f"Must provide username"
-
-        elif not request.form.get("password"):
-            return f"Must provide password"
-
-        elif not request.form.get("confirmation") == request.form.get("password"):
-            return f"Passwords don't match each other"
-
-        hash = generate_password_hash(request.form.get("password"), method='pbkdf2', salt_length=16)
-
-        new_user = User(username=username, hash=hash)
-        db.session.add(new_user)
-        db.session.commit()
-
-        flash("Registered!")
-        return redirect("/")
-
-    return render_template("register.html")
+    return create_response(response)
 
 @auth_bp.route("/login", methods=["GET"])
 def login_form():
@@ -49,7 +32,7 @@ def login_form():
 def login():
     session.clear()
 
-    data = request.json
+    data = request.get_json()
     print('@auth_bp.route: LOGIN', data)
     username = data.get("username")
     print('@auth_bp.route: username', username)
