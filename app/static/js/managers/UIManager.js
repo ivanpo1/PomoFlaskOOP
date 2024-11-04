@@ -1,9 +1,7 @@
-import initializeEventListeners from "./EventListenerManager.js";
-
 class UIManager {
   constructor(stateManager) {
     this.isEventListenersInitialized = false; 
-    this.stateManager = stateManager;
+    // this.stateManager = stateManager;
     this.taskDiv = document.querySelector(".show-task-div");
     this.showTaskDiv = document.querySelector(".show-tasks");
     this.spinnerTimeouts = {};
