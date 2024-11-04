@@ -9,10 +9,10 @@ timer_bp = Blueprint('timer', __name__, url_prefix='/timer')
 def timer():
     try:
         # Check if current_project_id exists in session
-        current_project_id = session.get("current_project_id")
+        current_project_id = 1
         if not current_project_id:
             # Optionally, redirect to a different page or return a custom message
-            return create_response(success=False, message="No project selected", status=400)
+            return create_response(False, "No project selected", None, 400)
         
         # Retrieve current project and its tasks
         current_project = ProjectService.get_project_by_id(current_project_id)
@@ -23,6 +23,7 @@ def timer():
         
         # Retrieve all projects for the dropdown
         projects = ProjectService.get_all_projects()
+        
         project_list = [{"name": project.name, "id": project.id} for project in projects]
         
         return render_template("timer.html", tasks=tasks, projects=project_list, has_complete_task=has_complete_task)
@@ -31,8 +32,12 @@ def timer():
         print(f"An error occurred: {e}")
         # Fallback: render template with just projects if an error occurs
         projects = ProjectService.get_all_projects()
-        project_list = [{"name": project.name, "id": project.id} for project in projects]
-        return render_template("timer.html", projects=project_list)
+        print(projects.data)
+        for project in projects.data:
+            print(project)
+        # project_data = projects["data"]  # Access the project list from the response dictionary
+        # project_list = [{"name": project["name"], "id": project["id"]} for project in project_data]
+        return render_template("timer.html", projects=projects.data)
 
 @timer_bp.route("/set_current_task/<string:task_name>", methods=["GET"])
 def set_current_task(task_name):

@@ -1,6 +1,6 @@
 from app.repositories import ProjectRepository
 from app.models import Project
-from app.utils import Response
+from app.utils.helpers import Response
 
 class ProjectService:
     @staticmethod
