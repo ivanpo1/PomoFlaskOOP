@@ -505,6 +505,46 @@ class UIManager {
     }
   }
 
+  initLoginListener() {
+    const loginForm = document.querySelector('#login_form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', this.handleLoginSubmit.bind(this));
+    }
+  }
+
+  async handleLoginSubmit(event) {
+    event.preventDefault();
+    const username = document.querySelector('#username').value;
+    const password = document.querySelector('#password').value;
+
+    try {
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Handle successful login (e.g., redirect to a dashboard or update UI)
+            console.log(result.success, result.data, result.code);
+            window.location.href = '/index'; // Adjust route as needed
+        } else {
+            
+            console.error(result.message);
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+        alert("An error occurred. Please try again.");
+    }
+  }
+
+
+
 
   updateTaskAppearance(taskElement, destination) {
     const checkbox = taskElement.querySelector('.checkbox-task');

@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{% block title %}
+    Log In
+{% endblock %}
+<script defer type="module">
+    import UIManager from "{{ url_for('static', filename='/js/managers/UIManager.js') }}";
+    document.addEventListener("DOMContentLoaded", () => {
+        UIManager.initLoginListener();
+    });
+</script>
+{% endblock %}
+
+{% block main %}
+    <!-- <form action="/login" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Log In</button>
+    </form> -->
+
+    <form id="login_form" autocomplete="off" novalidate="novalidate">
+        <div class="control-wrapper">
+          <label class="input-label" for="basic_username">Username</label>
+          <div class="input-wrapper">
+            <input
+              id="username"
+              class="input"
+              autocomplete="off"
+              type="text"
+              placeholder="Enter your username"
+            />
+          </div>
+        </div>
+        <div class="control-wrapper">
+          <label class="input-label" for="basic_email">Email</label>
+          <div class="input-wrapper">
+            <input
+              id="basic_email"
+              class="input"
+              autocomplete="off"
+              type="text"
+              placeholder="Enter your email"
+            />
+          </div>
+        </div>
+        <div class="control-wrapper">
+          <label class="input-label" for="basic_password">Password</label>
+          <div class="input-wrapper">
+            <input
+              id="password"
+              class="input"
+              autocomplete="off"
+              type="text"
+              placeholder="Enter your password"
+            />
+          </div>
+        </div>
+        <div class="control-wrapper">
+          <button type="submit" class="button">Submit</button>
+        </div>
+      </form>
+{% endblock %}

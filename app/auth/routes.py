@@ -41,6 +41,10 @@ def register():
 
     return render_template("register.html")
 
+@auth_bp.route("/login", methods=["GET"])
+def login_form():
+    return render_template("login.html")
+
 @auth_bp.route("/login", methods=["POST"])
 def login():
     session.clear()
