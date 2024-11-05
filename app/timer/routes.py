@@ -3,7 +3,7 @@ from app.models import Task, Project
 from app.services import ProjectService, TaskService
 from app.utils import create_response
 
-timer_bp = Blueprint('timer', __name__, url_prefix='/timer')
+timer_bp = Blueprint('timer', __name__,) #url_prefix='/timer')
 
 @timer_bp.route("/timer", methods=["GET", "POST"])
 def timer():
@@ -32,9 +32,9 @@ def timer():
         print(f"An error occurred: {e}")
         # Fallback: render template with just projects if an error occurs
         projects = ProjectService.get_all_projects()
-        print(projects.data)
-        for project in projects.data:
-            print(project)
+        # print(projects.data)
+        # for project in projects.data:
+        #     print(project)
         # project_data = projects["data"]  # Access the project list from the response dictionary
         # project_list = [{"name": project["name"], "id": project["id"]} for project in project_data]
         return render_template("timer.html", projects=projects.data)
