@@ -907,3 +907,48 @@ h4 {
   margin-top: 0.5rem;
   text-align: center;
 }
+
+.form-control {
+  text-align: center;
+}
+
+.form-wrapper {
+  width: 300px;
+  height: 500px;
+  background-color: #2e0a30; /* Change to desired color */
+  padding: 20px;
+  border-radius: 8px; /* Optional, for rounded corners */
+  border-color: #ececec86;
+  border-style: solid;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Optional, for a shadow effect */
+  margin: 0 auto; /* Center horizontally */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.task-item {
+  position: relative;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 500px;
+  margin: 10px 0;
+}
+
+.task-options {
+  display: none; /* Hide buttons by default */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+.task-item:hover .task-options {
+  display: flex; /* Show buttons on hover */
+  gap: 5px; /* Adds space between buttons */
+}
+
+.task-text {
+  cursor: text; /* Changes cursor to indicate text is editable */
+}

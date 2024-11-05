@@ -15,32 +15,44 @@
         </div>
         <button class="btn btn-primary" type="submit">Log In</button>
     </form> -->
-
-    <form id="loginForm" method="post">
-      <div class="mb-3">
+    <div class="form-wrapper">
+      <form id="loginForm" method="post">
+        <div class="mb-3">
           <input 
-              id="username"
-              class="form-control mx-auto w-auto" 
-              name="username" 
-              placeholder="Username" 
-              type="text"
+            id="username"
+            class="form-control mx-auto w-auto" 
+            name="username" 
+            placeholder="Username" 
+            type="text"
           >
-      </div>
-      <div class="mb-3">
+        </div>
+        <div class="mb-3">
           <input 
-              id="password"
-              class="form-control mx-auto w-auto" 
-              name="password" 
-              placeholder="Password" 
-              type="password"
+            id="password"
+            class="form-control mx-auto w-auto" 
+            name="password" 
+            placeholder="Password" 
+            type="password"
           >
-      </div>
-      <div id="login-error" class="alert alert-danger" style="display: none;"></div>
-      <button class="btn btn-primary" type="submit">Log In</button>
-  </form>
+        </div>
+        <div id="login-error" class="alert alert-danger" style="display: none;"></div>
+        <div class="mb-3 text-center">
+          <button class="btn btn-primary w-100 py-2" type="submit">Log In</button>
+        </div>
+      </form>
 
+      
+    </div>
+    <div class="task-item">
+      <span class="task-text mx-auto" contenteditable="true">Task Name</span>
+      <div class="task-options">
+        <button class="btn btn-primary">Start Timer</button>
+        <button class="btn btn-secondary">Settings</button>
+        <button class="btn btn-success">Mark Complete</button>
+      </div>
+    </div>
     <!-- <form id="login_form" autocomplete="off" novalidate="novalidate">
-        <div class="control-wrapper">
+      <div class="control-wrapper">
           <label class="input-label" for="basic_username">Username</label>
           <div class="input-wrapper">
             <input
