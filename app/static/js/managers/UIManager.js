@@ -1,3 +1,4 @@
+import TaskUIFactory from "./TaskUIFactory.js"
 
 class UIManager {
   constructor() {
@@ -209,8 +210,9 @@ class UIManager {
     // console.log(completeTaskList)
     tasks.forEach((task) => {
       if (!task.complete) {
-        const taskItem = this.createTaskElement(task);
-        incompleteTaskList.appendChild(taskItem);
+        const taskItem = TaskUIFactory.createTaskElement(task);
+        console.log('UIMANAGER taskItem', taskItem)
+        incompleteTaskList.appendChild(taskItem.element);
       }
     });
 
@@ -231,8 +233,9 @@ class UIManager {
 
       tasks.forEach((task) => {
         if (task.complete) {
-          const taskItem = this.createTaskElement(task);
-          taskList.appendChild(taskItem);
+          const taskItem = TaskUIFactory.createTaskElement(task);
+          console.log('UIMANAGER taskItem', taskItem)
+          taskList.appendChild(taskItem.element);
         }
       });
 

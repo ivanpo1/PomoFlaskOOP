@@ -32,7 +32,7 @@ class ProjectManager {
     
     async fetchProjectData(projectId) {
       try {
-        const response = await fetch("/api/projects/" + projectId);
+        const response = await fetch("/projects/" + projectId);
         const projectData = await response.json();
   
         if (projectData.error) {

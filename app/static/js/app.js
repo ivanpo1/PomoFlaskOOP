@@ -114,7 +114,7 @@ addTaskForm.addEventListener("submit", async function (event) {
 });
 
 async function databaseAllProjectsFetch() {
-  const response = await fetch('/api/project_data'); 
+  const response = await fetch('/projects/api/project_data'); 
   const projectData = await response.json();
 
   const taskList = [];

@@ -952,3 +952,53 @@ h4 {
 .task-text {
   cursor: text; /* Changes cursor to indicate text is editable */
 }
+
+
+.task-item {
+  position: relative;
+  height: 50px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.task-main-content {
+  display: flex;
+  align-items: center;
+}
+
+.task-text {
+  flex-grow: 1;
+  padding: 4px;
+  min-height: 24px;
+}
+
+.task-time-display {
+  margin-left: auto;
+  color: #666;
+}
+
+.task-options {
+  display: none;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  gap: 8px;
+  background: rgb(21, 1, 24);
+  padding: 4px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.task-options button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-timer { background-color: #007bff; color: white; }
+.btn-settings { background-color: #6c757d; color: white; }
+.btn-complete { background-color: #28a745; color: white; }
